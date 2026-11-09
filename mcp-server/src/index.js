@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * GrindFree agent-security MCP (stdio).
- * Exposes PromptShield, CrawlSafe, ToolGuard. Paid calls use the CALLER's
+ * Exposes PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard,
+ * WireShield and DocShield. Paid calls use the CALLER's
  * wallet via X402_PRIVATE_KEY / PRIVATE_KEY — never GrindFree keys.
  *
  * Unpaid discovery: tools still work for unpaid 402 probes when
@@ -13,10 +14,20 @@ import { z } from "zod";
 import { wrapFetchWithPaymentFromConfig } from "@x402/fetch";
 import { ExactEvmScheme } from "@x402/evm";
 import { privateKeyToAccount } from "viem/accounts";
+import { readFile, stat } from "node:fs/promises";
+import { basename } from "node:path";
 
 const PS = "https://promptshield.grindfree.net";
 const CS = "https://crawlsafe.grindfree.net";
 const TG = "https://toolguard.grindfree.net";
+const CG = "https://commandguard.grindfree.net";
+const MG = "https://memoryguard.grindfree.net";
+const WS = "https://wireshield.grindfree.net";
+const DS = "https://docshield.grindfree.net";
+const DOC_MAX_BYTES = 3 * 1024 * 1024;
+const policySchema = z.record(z.any()).optional().describe("Optional owner policy, e.g. {mode:'strict', allow_rules:[...]}");
+const reply = (r) => ({ content: [{ type: "text", text: JSON.stringify(r, null, 2) }], isError: !r.ok });
+const clean = (o) => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined));
 
 function getPaidFetch() {
   const pk = process.env.X402_PRIVATE_KEY || process.env.PRIVATE_KEY;
@@ -60,7 +71,7 @@ async function postJson(url, body, { paid } = { paid: true }) {
 
 const server = new McpServer({
   name: "grindfree-agent-security",
-  version: "0.1.0",
+  version: "0.2.0",
 });
 
 server.tool(
@@ -116,7 +127,7 @@ server.tool(
 
 server.tool(
   "toolguard_evaluate",
-  "Pre-tool-call policy gate for HTTP/MCP outbound actions. Returns allow|review|deny with deterministic reasons. Caller MUST enforce. Not malware scanning or an exfil guarantee. Missing policy → review. Paid x402 $0.002 USDC on Base. Note: funded settlement+delivery not independently verified by GrindFree.",
+  "Pre-tool-call policy gate for HTTP/MCP outbound actions. Returns allow|review|deny with deterministic reasons. Caller MUST enforce. Not malware scanning or an exfil guarantee. Missing policy → review. Paid x402 $0.002 USDC on Base. ",
   {
     tool: z.string().describe("Tool name, e.g. http.fetch or mcp.call"),
     destination: z
@@ -144,8 +155,83 @@ server.tool(
 );
 
 server.tool(
+  "commandguard_command",
+  "Check an agent-generated shell command (bash/sh/zsh/fish/PowerShell/cmd) BEFORE executing it. Returns allow|warn|block with rule codes (rm -rf, curl|sh, force-push to protected branches, credential exfil, cloud/infra deletes, disk wipes). Caller MUST enforce: do not run on block. Paid x402 $0.001 USDC on Base.",
+  {
+    command: z.string().max(20000).describe("Exact command line the agent intends to run"),
+    shell: z.enum(["bash", "sh", "zsh", "fish", "powershell", "cmd"]).optional(),
+    policy: policySchema,
+  },
+  async (a) => reply(await postJson(`${CG}/v1/command`, clean(a)))
+);
+
+server.tool(
+  "commandguard_sql",
+  "Check agent-generated SQL BEFORE executing it: DROP/TRUNCATE, DELETE/UPDATE without WHERE, tautological WHERE, GRANT/role changes, file/command execution, writes in read_only mode, protected tables. Returns allow|warn|block. Caller MUST enforce. Paid x402 $0.001 USDC on Base.",
+  {
+    sql: z.string().max(50000).describe("One or more SQL statements"),
+    dialect: z.enum(["postgres", "mysql", "mariadb", "sqlite", "mssql", "snowflake", "bigquery", "other"]).optional(),
+    policy: policySchema.describe("e.g. {read_only:true} or {protected_tables:['users'], allow_write_tables:['events']}"),
+  },
+  async (a) => reply(await postJson(`${CG}/v1/sql`, clean(a)))
+);
+
+server.tool(
+  "memoryguard_screen",
+  "Screen content BEFORE writing it to an agent's long-term memory: planted instructions, persistence/trigger attacks ('from now on…', 'whenever the user asks…'), exfil setups, secrets and PII. Source-aware (user vs tool/web/email). Returns allow|review|block plus a sanitized copy. Paid x402 $0.002 USDC on Base.",
+  {
+    content: z.string().max(16000).optional().describe("Single memory entry (or use entries)"),
+    source: z.enum(["user", "assistant", "tool", "web", "document", "email", "retrieved", "mcp", "unknown"]).optional(),
+    memory_type: z.enum(["fact", "preference", "instruction", "episodic", "summary"]).optional(),
+    entries: z.array(z.object({ key: z.string().optional(), content: z.string(), source: z.string().optional() })).max(25).optional(),
+    policy: policySchema,
+  },
+  async (a) => reply(await postJson(`${MG}/v1/screen`, clean(a)))
+);
+
+server.tool(
+  "wireshield_scan",
+  "Scan agent OUTPUT before it is rendered or sent: zero-click markdown-image exfil, data smuggled in URLs/DNS labels, deceptive links, leaked canary tokens, system-prompt leakage, hidden Unicode, active HTML, secrets and PII. Returns allow|review|block plus a sanitized copy. Paid x402 $0.002 USDC on Base.",
+  {
+    content: z.string().max(100000).describe("Agent output about to be shown or sent"),
+    format: z.enum(["markdown", "text", "html", "json"]).optional(),
+    allowed_domains: z.array(z.string()).optional().describe("Hosts allowed to auto-load images"),
+    canaries: z.array(z.string()).optional().describe("Canary tokens planted in your system prompt"),
+    system_prompt: z.string().optional().describe("Optional; used only for verbatim-overlap detection, never stored"),
+    policy: policySchema,
+  },
+  async (a) => reply(await postJson(`${WS}/v1/scan`, clean(a)))
+);
+
+server.tool(
+  "docshield_scan",
+  "Scan a document BEFORE the agent reads it for hidden instructions: PDF (invisible/white/microscopic/off-page text, annotations, metadata, JavaScript), DOCX/XLSX/PPTX (hidden runs/sheets/rows/slides, speaker notes, comments, remote templates, DDE), HTML, Markdown. Returns allow|review|block and optional visible-only safe_text. Max 3 MB. Paid x402 $0.004 USDC on Base (unsupported/unparseable files are not charged).",
+  {
+    path: z.string().optional().describe("Local file path (read by this MCP server on your machine)"),
+    content_base64: z.string().optional().describe("File bytes, base64 (alternative to path)"),
+    content: z.string().optional().describe("HTML/Markdown/text (alternative to path)"),
+    format: z.enum(["html", "markdown", "text"]).optional(),
+    filename: z.string().optional(),
+    include_text: z.boolean().optional().describe("Return visible-only safe_text"),
+    policy: policySchema,
+  },
+  async ({ path, ...a }) => {
+    const body = clean(a);
+    if (path) {
+      const st = await stat(path).catch(() => null);
+      if (!st || !st.isFile()) return reply({ ok: false, status: 0, error: `File not found: ${path}` });
+      if (st.size > DOC_MAX_BYTES) return reply({ ok: false, status: 0, error: `File is ${st.size} bytes; DocShield max is ${DOC_MAX_BYTES}. Not sent, not charged.` });
+      body.content_base64 = (await readFile(path)).toString("base64");
+      body.filename = body.filename || basename(path);
+    }
+    if (!body.content_base64 && !body.content) return reply({ ok: false, status: 0, error: "Provide path, content_base64 or content." });
+    return reply(await postJson(`${DS}/v1/scan`, body));
+  }
+);
+
+server.tool(
   "grindfree_discovery",
-  "Return machine-readable discovery URLs and unpaid 402 challenge shapes for PromptShield, CrawlSafe, and ToolGuard (no payment).",
+  "Return machine-readable discovery URLs and unpaid 402 challenge shapes for all GrindFree agent-security APIs (no payment).",
   {},
   async () => {
     const endpoints = [
@@ -164,6 +250,11 @@ server.tool(
           policy: { allow_tools: ["http.fetch"], allow_hosts: ["grindfree.net"], require_https: true },
         },
       },
+      { name: "commandguard_command", url: `${CG}/v1/command`, body: { command: "ls -la" } },
+      { name: "commandguard_sql", url: `${CG}/v1/sql`, body: { sql: "SELECT 1" } },
+      { name: "memoryguard_screen", url: `${MG}/v1/screen`, body: { content: "User prefers metric units.", source: "user" } },
+      { name: "wireshield_scan", url: `${WS}/v1/scan`, body: { content: "hello", format: "text" } },
+      { name: "docshield_scan", url: `${DS}/v1/scan`, body: { content: "<p>hi</p>", format: "html" } },
     ];
     const probes = [];
     for (const ep of endpoints) {
@@ -187,16 +278,16 @@ server.tool(
     }
     const text = JSON.stringify(
       {
-        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG },
+        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS },
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: "0.002",
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.002", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004" },
           network: "eip155:8453",
         },
         unpaid_probes: probes,
         payment_note:
-          "Paid tools require caller X402_PRIVATE_KEY with Base USDC. ToolGuard funded settlement+delivery not independently verified by GrindFree.",
+          "Paid tools require caller X402_PRIVATE_KEY with Base USDC. Decisions are advisory: the caller must enforce block/deny.",
       },
       null,
       2

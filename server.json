@@ -2,24 +2,24 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.ronin93/grindfree-agent-security",
   "title": "GrindFree Agent Security",
-  "description": "PromptShield, CrawlSafe, and ToolGuard over x402 ($0.002 USDC on Base). Caller wallet pays via X402_PRIVATE_KEY.",
+  "description": "7 agent-security tools via x402 on Base: injection, tool, shell/SQL, memory, leak, doc checks",
   "repository": {
     "url": "https://github.com/ronin93/grindfree-agent-security",
     "source": "github"
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@grindfree/agent-security-mcp",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "transport": {
         "type": "stdio"
       },
       "environmentVariables": [
         {
           "name": "X402_PRIVATE_KEY",
-          "description": "Caller's own Base USDC EVM private key (0x…). Used only by the local MCP host to settle x402 payments. Never a GrindFree key; never commit this value.",
+          "description": "Caller's own Base USDC EVM private key (0x\u2026). Used only by the local MCP host to settle x402 payments. Never a GrindFree key; never commit this value.",
           "isRequired": true,
           "isSecret": true
         }

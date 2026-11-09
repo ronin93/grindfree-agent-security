@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": false,
   "type": "module",
-  "description": "MCP server + snippets for PromptShield, CrawlSafe, ToolGuard (x402; caller wallet)",
+  "description": "MCP server + snippets for GrindFree agent-security APIs (x402; caller wallet)",
   "workspaces": [
     "mcp-server"
   ],

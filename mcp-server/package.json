@@ -1,7 +1,7 @@
 {
   "name": "@grindfree/agent-security-mcp",
-  "version": "0.1.0",
-  "description": "stdio MCP server exposing PromptShield, CrawlSafe, and ToolGuard with x402 payment via the caller's wallet (never GrindFree keys)",
+  "version": "0.2.0",
+  "description": "Agent-security MCP: PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard, WireShield, DocShield over x402 (USDC on Base, caller's wallet; never GrindFree keys)",
   "type": "module",
   "bin": {
     "grindfree-agent-security-mcp": "src/index.js"
@@ -24,7 +24,17 @@
     "crawlsafe",
     "toolguard",
     "agent-security",
-    "ai-agents"
+    "ai-agents",
+    "commandguard",
+    "memoryguard",
+    "wireshield",
+    "docshield",
+    "shell-safety",
+    "sql-safety",
+    "agent-memory",
+    "data-exfiltration",
+    "pdf",
+    "hidden-text"
   ],
   "license": "MIT",
   "dependencies": {
