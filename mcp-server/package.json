@@ -1,0 +1,46 @@
+{
+  "name": "@grindfree/agent-security-mcp",
+  "version": "0.1.0",
+  "description": "stdio MCP server exposing PromptShield, CrawlSafe, and ToolGuard with x402 payment via the caller's wallet (never GrindFree keys)",
+  "type": "module",
+  "bin": {
+    "grindfree-agent-security-mcp": "./src/index.js"
+  },
+  "main": "./src/index.js",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "mcp",
+    "x402",
+    "prompt-injection",
+    "agents",
+    "security",
+    "promptshield",
+    "crawlsafe",
+    "toolguard",
+    "agent-security",
+    "ai-agents"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@x402/evm": "^2.29.0",
+    "@x402/fetch": "^2.29.0",
+    "viem": "^2.57.16",
+    "zod": "^3.24.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ronin93/grindfree-agent-security.git"
+  },
+  "homepage": "https://github.com/ronin93/grindfree-agent-security#readme",
+  "bugs": {
+    "url": "https://github.com/ronin93/grindfree-agent-security/issues"
+  },
+  "author": "GrindFree"
+}

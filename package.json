@@ -1,0 +1,18 @@
+{
+  "name": "grindfree-integrations",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "MCP server + snippets for PromptShield, CrawlSafe, ToolGuard (x402; caller wallet)",
+  "workspaces": [
+    "mcp-server"
+  ],
+  "scripts": {
+    "test:inert": "node scripts/inert-signer-probe.mjs",
+    "test:mcp-unpaid": "node scripts/mcp-unpaid-smoke.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ronin93/grindfree-agent-security.git"
+  }
+}
