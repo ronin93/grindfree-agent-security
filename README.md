@@ -78,7 +78,7 @@ curl -sS -D - -o /tmp/ps402.json -X POST https://promptshield.grindfree.net/v1/s
 - Heuristic / policy layers — not a full security program.
 - CrawlSafe is **not** malware, phishing, or legal/ToS advice.
 - ToolGuard returns a decision; **the caller/adapter must enforce it** before tool execution. Missing policy → `review`. Not an exfiltration guarantee.
-- ToolGuard: always enforce allow|review|deny in your adapter before tool execution. Confirm paid settlement + delivery with your own Base USDC wallet (see docs/distribution notes).
+- ToolGuard: always enforce allow|review|deny in your adapter before tool execution (the API cannot stop a bypass). GrindFree has confirmed funded settlement + HTTP 200 delivery on `/v1/evaluate` via a self-funded Base USDC test; still verify with your own wallet in production.
 
 ---
 
