@@ -4,7 +4,7 @@
   "description": "stdio MCP server exposing PromptShield, CrawlSafe, and ToolGuard with x402 payment via the caller's wallet (never GrindFree keys)",
   "type": "module",
   "bin": {
-    "grindfree-agent-security-mcp": "./src/index.js"
+    "grindfree-agent-security-mcp": "src/index.js"
   },
   "main": "./src/index.js",
   "files": [
@@ -34,9 +34,10 @@
     "viem": "^2.57.16",
     "zod": "^3.24.0"
   },
+  "mcpName": "io.github.ronin93/grindfree-agent-security",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ronin93/grindfree-agent-security.git"
+    "url": "git+https://github.com/ronin93/grindfree-agent-security.git"
   },
   "homepage": "https://github.com/ronin93/grindfree-agent-security#readme",
   "bugs": {
