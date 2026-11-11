@@ -16,3 +16,5 @@ Submit only after the MCP package has a public GitHub URL and/or npm name.
 | PulseMCP | Paused (imports official registry) | — | Publish official registry first |
 
 **This run:** package built + tested locally. Publishing blocked on `gh auth login` and `npm login` (and mcp-publisher GitHub login).
+
+**Update 2026-11-10 ~9:20 PM ET:** Dockerfile and `glama.json` (`maintainers: ["ronin93"]`) added at the repo root. Official MCP Registry and npm 0.2.0 already live. Glama listing exists at https://glama.ai/mcp/servers/ronin93/grindfree-agent-security but *claiming* still needs a browser signed into GitHub as ronin93 on glama.ai (box browser is not signed in). Docker MCP Catalog submission is a PR to docker/mcp-registry (category `ai`, secret `X402_PRIVATE_KEY`). Smithery wants a hosted streamable-HTTP or signed-in CLI; mcp.so free submit appears to be a form/issue and may require a human or a $39 paid skip.

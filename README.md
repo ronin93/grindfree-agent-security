@@ -64,7 +64,19 @@ Claude Desktop / Cursor-style config:
 
 ---
 
+## Docker
+
+A root `Dockerfile` builds the stdio MCP server. The wallet is supplied at runtime, never baked in:
+
+```bash
+docker build -t grindfree-agent-security .
+docker run --rm -i -e X402_PRIVATE_KEY=0xYOUR_BASE_USDC_PRIVATE_KEY grindfree-agent-security
+```
+
+`glama.json` lists `ronin93` as maintainer so the [Glama listing](https://glama.ai/mcp/servers/ronin93/grindfree-agent-security) can be claimed (requires a one-time GitHub sign-in on glama.ai).
+
 ## HTTP snippets (no MCP)
+
 
 - `examples/typescript-x402-fetch.ts` — official `@x402/fetch` + `@x402/evm`
 - `examples/python-x402.py` — unpaid probes + paid hook
