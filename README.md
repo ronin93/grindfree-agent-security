@@ -13,6 +13,7 @@ MCP server + client snippets for GrindFree’s pay-per-call agent security APIs 
 | **DocShield** | `POST https://docshield.grindfree.net/v1/scan` | $0.004 | Hidden instructions in PDF / DOCX / XLSX / PPTX / HTML / Markdown before the agent reads them |
 | **SafeRead** | `POST https://saferead.grindfree.net/v1/read` | $0.003 | Fetch a URL as clean Markdown with hidden text and prompt injections removed or flagged (SSRF-guarded; HTML, text, JSON, PDF) |
 | **AskHuman** | `POST https://askhuman.grindfree.net/v1/request` | $0.03 | Human-in-the-loop approval: one-tap approve/deny/edit link (ntfy, Slack, Discord, webhook); decision by poll, long-poll or signed callback; fails closed |
+| **TrifectaGate** | `POST https://trifectagate.grindfree.net/v1/check` | $0.002 | Session exfiltration gate: private data + untrusted content + outbound action → allow / review / block (sticky per-session taint, URL smuggling, secrets in payload) |
 
 **Price:** per call in USDC (table above) on **Base** (`eip155:8453`) via [x402](https://x402.org) v2.  
 **Wallet:** the **caller’s** Base USDC wallet pays. This repo never ships GrindFree keys.

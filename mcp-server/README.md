@@ -1,6 +1,6 @@
 # @grindfree/agent-security-mcp
 
-stdio MCP server for **PromptShield**, **CrawlSafe**, **ToolGuard**, **CommandGuard**, **MemoryGuard**, **WireShield**, **DocShield**, **SafeRead** and **AskHuman**.
+stdio MCP server for **PromptShield**, **CrawlSafe**, **ToolGuard**, **CommandGuard**, **MemoryGuard**, **WireShield**, **DocShield**, **SafeRead**, **AskHuman** and **TrifectaGate**.
 
 Paid tool calls settle x402 (USDC on Base, $0.001–$0.004 per call) using **the caller's** wallet via `X402_PRIVATE_KEY` or `PRIVATE_KEY`. GrindFree keys are never used or accepted.
 
@@ -43,6 +43,7 @@ Claude Desktop / Cursor MCP config example:
 | `saferead_read` | POST https://saferead.grindfree.net/v1/read | fetch a URL as clean Markdown with hidden text + prompt injections removed/flagged; SSRF-guarded · $0.003 |
 | `askhuman_request` | POST https://askhuman.grindfree.net/v1/request | ask the human owner to approve/deny/edit one action (ntfy, Slack, Discord, webhook or link) · $0.03 |
 | `askhuman_status` | GET https://askhuman.grindfree.net/status/{id} | decision for a request; long-poll with wait · free |
+| `trifectagate_check` | POST https://trifectagate.grindfree.net/v1/check | session exfiltration gate before any outbound action: allow/review/block · $0.002 |
 | `grindfree_discovery` | (local unpaid probes) | well-known / 402 challenge summary |
 
 ## Honesty

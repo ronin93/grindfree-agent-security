@@ -1,7 +1,7 @@
 {
   "name": "@grindfree/agent-security-mcp",
   "version": "0.4.0",
-  "description": "Agent-security MCP: PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard, WireShield, DocShield, SafeRead, AskHuman over x402 (USDC on Base, caller's wallet; never GrindFree keys)",
+  "description": "Agent-security MCP: PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard, WireShield, DocShield, SafeRead, AskHuman, TrifectaGate over x402 (USDC on Base, caller's wallet; never GrindFree keys)",
   "type": "module",
   "bin": {
     "grindfree-agent-security-mcp": "src/index.js"
@@ -42,7 +42,11 @@
     "askhuman",
     "human-in-the-loop",
     "approval",
-    "hitl"
+    "hitl",
+    "trifectagate",
+    "lethal-trifecta",
+    "exfiltration",
+    "egress"
   ],
   "license": "MIT",
   "dependencies": {

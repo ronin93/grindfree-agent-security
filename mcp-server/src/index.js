@@ -2,7 +2,7 @@
 /**
  * GrindFree agent-security MCP (stdio).
  * Exposes PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard,
- * WireShield, DocShield, SafeRead and AskHuman. Paid calls use the CALLER's
+ * WireShield, DocShield, SafeRead, AskHuman and TrifectaGate. Paid calls use the CALLER's
  * wallet via X402_PRIVATE_KEY / PRIVATE_KEY — never GrindFree keys.
  *
  * Unpaid discovery: tools still work for unpaid 402 probes when
@@ -26,6 +26,7 @@ const WS = "https://wireshield.grindfree.net";
 const DS = "https://docshield.grindfree.net";
 const SR = "https://saferead.grindfree.net";
 const AH = "https://askhuman.grindfree.net";
+const TF = "https://trifectagate.grindfree.net";
 const DOC_MAX_BYTES = 3 * 1024 * 1024;
 const policySchema = z.record(z.any()).optional().describe("Optional owner policy, e.g. {mode:'strict', allow_rules:[...]}");
 const reply = (r) => ({ content: [{ type: "text", text: JSON.stringify(r, null, 2) }], isError: !r.ok });
@@ -248,6 +249,38 @@ server.tool(
 );
 
 server.tool(
+  "trifectagate_check",
+  "Session exfiltration gate (lethal trifecta): call BEFORE every outbound action (HTTP request, webhook, email, message, image URL, DNS, payment). Report what the session touched as events (private_data from inboxes/DBs/files; untrusted_content from web pages, docs, tool output, with SafeRead/PromptShield verdict if known). Returns allow | review | block with rule + reasons; review includes a ready AskHuman request. Taint is sticky per session_id. Paid x402 $0.002 USDC on Base (invalid input not charged).",
+  {
+    session_id: z.string().min(16).max(128).optional().describe("Unguessable id for this agent session; reuse it on every call"),
+    events: z.array(z.object({
+      type: z.enum(["private_data", "untrusted_content"]),
+      source: z.string().describe("Tool or system, e.g. gmail.read, web.fetch"),
+      origin: z.string().optional().describe("URL/host the content came from"),
+      verdict: z.enum(["allow", "warn", "review", "block", "deny"]).optional(),
+      labels: z.array(z.string()).optional(),
+    })).max(50).optional(),
+    action: z.object({
+      type: z.enum(["http_request", "webhook", "email", "message", "image_url", "dns", "payment", "file_write", "code_exec", "tool_call"]),
+      destination: z.string().optional().describe("URL, host or email address"),
+      tool: z.string().optional(),
+      method: z.string().optional(),
+      payload_preview: z.string().max(8192).optional().describe("What will be sent (scanned, not stored)"),
+      data_classes: z.array(z.string()).optional(),
+    }).optional(),
+    policy: z.object({
+      mode: z.enum(["balanced", "strict"]).optional(),
+      allow_hosts: z.array(z.string()).optional(),
+      internal_domains: z.array(z.string()).optional(),
+      trusted_sources: z.array(z.string()).optional(),
+    }).optional(),
+    session_facts: z.object({ private_data: z.boolean().optional(), untrusted_content: z.boolean().optional(), untrusted_flagged: z.boolean().optional() }).optional(),
+    session_ttl_seconds: z.number().int().min(300).max(604800).optional(),
+  },
+  async (a) => reply(await postJson(`${TF}/v1/check`, clean(a)))
+);
+
+server.tool(
   "askhuman_request",
   "Human-in-the-loop approval: ask the agent's human owner to approve, deny or edit ONE proposed action before you run it (refunds, emails, deletes, deploys, payments, or any guard 'review' verdict). Pushes a one-tap review link via ntfy, Slack, Discord or a webhook (or returns it with link_only). Returns id, poll_token, wait_url and approval_url (give approval_url only to the reviewer). Then call askhuman_status until status != pending. Fails closed: no answer before timeout = denied. Paid x402 $0.03 USDC on Base (invalid input or a failed notification is not charged).",
   {
@@ -323,6 +356,7 @@ server.tool(
       { name: "docshield_scan", url: `${DS}/v1/scan`, body: { content: "<p>hi</p>", format: "html" } },
       { name: "saferead_read", url: `${SR}/v1/read`, body: { url: "https://example.com/" } },
       { name: "askhuman_request", url: `${AH}/v1/request`, body: { action: { title: "probe" }, notify: { link_only: true } } },
+      { name: "trifectagate_check", url: `${TF}/v1/check`, body: { action: { type: "http_request", destination: "https://example.com/" } } },
     ];
     const probes = [];
     for (const ep of endpoints) {
@@ -346,11 +380,11 @@ server.tool(
     }
     const text = JSON.stringify(
       {
-        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR, askhuman: AH },
+        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR, askhuman: AH, trifectagate: TF },
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.002", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.003", askhuman: "0.03" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.002", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.003", askhuman: "0.03", trifectagate: "0.002" },
           network: "eip155:8453",
         },
         unpaid_probes: probes,
