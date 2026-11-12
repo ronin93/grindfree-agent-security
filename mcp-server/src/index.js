@@ -2,7 +2,7 @@
 /**
  * GrindFree agent-security MCP (stdio).
  * Exposes PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard,
- * WireShield, DocShield and SafeRead. Paid calls use the CALLER's
+ * WireShield, DocShield, SafeRead and AskHuman. Paid calls use the CALLER's
  * wallet via X402_PRIVATE_KEY / PRIVATE_KEY — never GrindFree keys.
  *
  * Unpaid discovery: tools still work for unpaid 402 probes when
@@ -25,6 +25,7 @@ const MG = "https://memoryguard.grindfree.net";
 const WS = "https://wireshield.grindfree.net";
 const DS = "https://docshield.grindfree.net";
 const SR = "https://saferead.grindfree.net";
+const AH = "https://askhuman.grindfree.net";
 const DOC_MAX_BYTES = 3 * 1024 * 1024;
 const policySchema = z.record(z.any()).optional().describe("Optional owner policy, e.g. {mode:'strict', allow_rules:[...]}");
 const reply = (r) => ({ content: [{ type: "text", text: JSON.stringify(r, null, 2) }], isError: !r.ok });
@@ -247,6 +248,54 @@ server.tool(
 );
 
 server.tool(
+  "askhuman_request",
+  "Human-in-the-loop approval: ask the agent's human owner to approve, deny or edit ONE proposed action before you run it (refunds, emails, deletes, deploys, payments, or any guard 'review' verdict). Pushes a one-tap review link via ntfy, Slack, Discord or a webhook (or returns it with link_only). Returns id, poll_token, wait_url and approval_url (give approval_url only to the reviewer). Then call askhuman_status until status != pending. Fails closed: no answer before timeout = denied. Paid x402 $0.03 USDC on Base (invalid input or a failed notification is not charged).",
+  {
+    action: z.object({
+      title: z.string().max(120).describe("Short description of the action"),
+      summary: z.string().max(2000).optional(),
+      details: z.string().max(4000).optional(),
+      tool: z.string().optional().describe("Tool the agent wants to call"),
+      args: z.any().optional().describe("Proposed arguments (JSON, <=8 KB)"),
+      risk: z.enum(["low", "medium", "high", "critical"]).optional(),
+      context_url: z.string().optional(),
+    }),
+    notify: z.object({
+      ntfy_topic: z.string().optional().describe("ntfy.sh topic the owner subscribes to (8-64 chars A-Za-z0-9_-)"),
+      webhook_url: z.string().optional(),
+      slack_webhook_url: z.string().optional(),
+      discord_webhook_url: z.string().optional(),
+      link_only: z.boolean().optional().describe("No push; you show approval_url to the human yourself"),
+    }).describe("Exactly one channel"),
+    timeout_seconds: z.number().int().min(60).max(86400).optional().describe("Default 3600"),
+    on_timeout: z.enum(["deny", "expire"]).optional(),
+    allow_edit: z.boolean().optional(),
+    callback_url: z.string().optional().describe("https URL for an HMAC-signed decision callback"),
+    guard_decision: z.object({ service: z.string().optional(), verdict: z.string().optional(), reasons: z.array(z.string()).optional() }).optional(),
+  },
+  async (a) => reply(await postJson(`${AH}/v1/request`, clean(a)))
+);
+
+server.tool(
+  "askhuman_status",
+  "Get the human's decision for an AskHuman request (free). status: pending|approved|denied|edited|expired. Run the action only on approved (or edited, using edited_args). wait (1-25 s) long-polls.",
+  {
+    id: z.string().regex(/^ah_[0-9a-f]{32}$/),
+    poll_token: z.string(),
+    wait: z.number().int().min(0).max(25).optional(),
+  },
+  async ({ id, poll_token, wait }) => {
+    try {
+      const res = await fetch(`${AH}/status/${id}?token=${encodeURIComponent(poll_token)}${wait ? `&wait=${wait}` : ""}`, { headers: { accept: "application/json" } });
+      const data = await res.json().catch(() => ({}));
+      return reply({ ok: res.ok, status: res.status, data });
+    } catch (e) {
+      return reply({ ok: false, status: 0, error: String(e?.message || e) });
+    }
+  }
+);
+
+server.tool(
   "grindfree_discovery",
   "Return machine-readable discovery URLs and unpaid 402 challenge shapes for all GrindFree agent-security APIs (no payment).",
   {},
@@ -273,6 +322,7 @@ server.tool(
       { name: "wireshield_scan", url: `${WS}/v1/scan`, body: { content: "hello", format: "text" } },
       { name: "docshield_scan", url: `${DS}/v1/scan`, body: { content: "<p>hi</p>", format: "html" } },
       { name: "saferead_read", url: `${SR}/v1/read`, body: { url: "https://example.com/" } },
+      { name: "askhuman_request", url: `${AH}/v1/request`, body: { action: { title: "probe" }, notify: { link_only: true } } },
     ];
     const probes = [];
     for (const ep of endpoints) {
@@ -296,11 +346,11 @@ server.tool(
     }
     const text = JSON.stringify(
       {
-        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR },
+        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR, askhuman: AH },
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.002", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.003" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.002", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.003", askhuman: "0.03" },
           network: "eip155:8453",
         },
         unpaid_probes: probes,
