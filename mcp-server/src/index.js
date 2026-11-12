@@ -2,7 +2,7 @@
 /**
  * GrindFree agent-security MCP (stdio).
  * Exposes PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard,
- * WireShield and DocShield. Paid calls use the CALLER's
+ * WireShield, DocShield and SafeRead. Paid calls use the CALLER's
  * wallet via X402_PRIVATE_KEY / PRIVATE_KEY — never GrindFree keys.
  *
  * Unpaid discovery: tools still work for unpaid 402 probes when
@@ -24,6 +24,7 @@ const CG = "https://commandguard.grindfree.net";
 const MG = "https://memoryguard.grindfree.net";
 const WS = "https://wireshield.grindfree.net";
 const DS = "https://docshield.grindfree.net";
+const SR = "https://saferead.grindfree.net";
 const DOC_MAX_BYTES = 3 * 1024 * 1024;
 const policySchema = z.record(z.any()).optional().describe("Optional owner policy, e.g. {mode:'strict', allow_rules:[...]}");
 const reply = (r) => ({ content: [{ type: "text", text: JSON.stringify(r, null, 2) }], isError: !r.ok });
@@ -71,7 +72,7 @@ async function postJson(url, body, { paid } = { paid: true }) {
 
 const server = new McpServer({
   name: "grindfree-agent-security",
-  version: "0.2.0",
+  version: "0.3.0",
 });
 
 server.tool(
@@ -230,6 +231,22 @@ server.tool(
 );
 
 server.tool(
+  "saferead_read",
+  "Safe web reader: fetch a URL and get clean Markdown (or text) with hidden content (display:none, font-size:0, off-screen, comments, invisible Unicode) and prompt-injection instructions removed or flagged. Returns title, content, removed/flagged segments with reasons, an allow|warn|block verdict and fetch metadata. SSRF-guarded; HTML, text, JSON, PDF. Use instead of a raw fetch for pages the agent did not write. Paid x402 $0.003 USDC on Base (blocked URLs, failed fetches and unsupported types are not charged).",
+  {
+    url: z.string().url().describe("http(s) URL to read"),
+    format: z.enum(["markdown", "text"]).optional().describe("Output format; default markdown"),
+    mode: z.enum(["strip", "flag"]).optional().describe("strip removes injected blocks (default); flag keeps and lists them"),
+    max_chars: z.number().int().min(1000).max(200000).optional().describe("Max content characters (default 50000)"),
+    include_links: z.boolean().optional(),
+    include_images: z.boolean().optional(),
+    main_content: z.boolean().optional().describe("Prefer <main>/<article>, drop nav/footer (default true)"),
+    policy: policySchema,
+  },
+  async (a) => reply(await postJson(`${SR}/v1/read`, clean(a)))
+);
+
+server.tool(
   "grindfree_discovery",
   "Return machine-readable discovery URLs and unpaid 402 challenge shapes for all GrindFree agent-security APIs (no payment).",
   {},
@@ -255,6 +272,7 @@ server.tool(
       { name: "memoryguard_screen", url: `${MG}/v1/screen`, body: { content: "User prefers metric units.", source: "user" } },
       { name: "wireshield_scan", url: `${WS}/v1/scan`, body: { content: "hello", format: "text" } },
       { name: "docshield_scan", url: `${DS}/v1/scan`, body: { content: "<p>hi</p>", format: "html" } },
+      { name: "saferead_read", url: `${SR}/v1/read`, body: { url: "https://example.com/" } },
     ];
     const probes = [];
     for (const ep of endpoints) {
@@ -278,11 +296,11 @@ server.tool(
     }
     const text = JSON.stringify(
       {
-        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS },
+        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR },
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.002", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.002", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.003" },
           network: "eip155:8453",
         },
         unpaid_probes: probes,

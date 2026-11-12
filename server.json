@@ -2,17 +2,17 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.ronin93/grindfree-agent-security",
   "title": "GrindFree Agent Security",
-  "description": "Pay-per-call agent security: prompt injection, URLs, tools, shell/SQL, memory, leaks, docs (x402)",
+  "description": "Pay-per-call agent security: prompt injection, URLs, tools, shell/SQL, memory, leaks, docs, safe reads (x402)",
   "repository": {
     "url": "https://github.com/ronin93/grindfree-agent-security",
     "source": "github"
   },
-  "version": "0.2.0",
+  "version": "0.3.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@grindfree/agent-security-mcp",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "transport": {
         "type": "stdio"
       },

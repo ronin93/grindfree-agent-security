@@ -1,7 +1,7 @@
 {
   "name": "@grindfree/agent-security-mcp",
-  "version": "0.2.0",
-  "description": "Agent-security MCP: PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard, WireShield, DocShield over x402 (USDC on Base, caller's wallet; never GrindFree keys)",
+  "version": "0.3.0",
+  "description": "Agent-security MCP: PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard, WireShield, DocShield, SafeRead over x402 (USDC on Base, caller's wallet; never GrindFree keys)",
   "type": "module",
   "bin": {
     "grindfree-agent-security-mcp": "src/index.js"
@@ -34,7 +34,11 @@
     "agent-memory",
     "data-exfiltration",
     "pdf",
-    "hidden-text"
+    "hidden-text",
+    "saferead",
+    "web-reader",
+    "markdown",
+    "web-scraping"
   ],
   "license": "MIT",
   "dependencies": {

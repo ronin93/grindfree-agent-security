@@ -11,6 +11,7 @@ MCP server + client snippets for GrindFree’s pay-per-call agent security APIs 
 | **MemoryGuard** | `POST https://memoryguard.grindfree.net/v1/screen` | $0.002 | Screen content before it is written to agent memory (planted instructions, persistence, secrets/PII) |
 | **WireShield** | `POST https://wireshield.grindfree.net/v1/scan` | $0.002 | Outbound leak check on agent output (zero-click image exfil, URL smuggling, canaries, prompt leakage) |
 | **DocShield** | `POST https://docshield.grindfree.net/v1/scan` | $0.004 | Hidden instructions in PDF / DOCX / XLSX / PPTX / HTML / Markdown before the agent reads them |
+| **SafeRead** | `POST https://saferead.grindfree.net/v1/read` | $0.003 | Fetch a URL as clean Markdown with hidden text and prompt injections removed or flagged (SSRF-guarded; HTML, text, JSON, PDF) |
 
 **Price:** per call in USDC (table above) on **Base** (`eip155:8453`) via [x402](https://x402.org) v2.  
 **Wallet:** the **caller’s** Base USDC wallet pays. This repo never ships GrindFree keys.
@@ -99,6 +100,7 @@ curl -sS -D - -o /tmp/ps402.json -X POST https://promptshield.grindfree.net/v1/s
 - CrawlSafe is **not** malware, phishing, or legal/ToS advice.
 - All guards are deterministic rule packs (no LLM), so they are fast and cheap but can miss novel phrasing; decisions are advisory and **your code must enforce block/deny**.
 - DocShield parses structure and text; it does not OCR images or render pages, and legacy .doc/.xls/.ppt return 415 (not charged).
+- SafeRead does not run JavaScript or OCR images; pages that discuss prompt injection may have example blocks removed (use `mode:"flag"`). Blocked URLs, failed fetches and unsupported types are not charged.
 - ToolGuard returns a decision; **the caller/adapter must enforce it** before tool execution. Missing policy → `review`. Not an exfiltration guarantee.
 - ToolGuard: always enforce allow|review|deny in your adapter before tool execution (the API cannot stop a bypass). GrindFree has confirmed funded settlement + HTTP 200 delivery on `/v1/evaluate` via a self-funded Base USDC test; still verify with your own wallet in production.
 

@@ -1,6 +1,6 @@
 # @grindfree/agent-security-mcp
 
-stdio MCP server for **PromptShield**, **CrawlSafe**, **ToolGuard**, **CommandGuard**, **MemoryGuard**, **WireShield** and **DocShield**.
+stdio MCP server for **PromptShield**, **CrawlSafe**, **ToolGuard**, **CommandGuard**, **MemoryGuard**, **WireShield**, **DocShield** and **SafeRead**.
 
 Paid tool calls settle x402 (USDC on Base, $0.001–$0.004 per call) using **the caller's** wallet via `X402_PRIVATE_KEY` or `PRIVATE_KEY`. GrindFree keys are never used or accepted.
 
@@ -40,6 +40,7 @@ Claude Desktop / Cursor MCP config example:
 | `memoryguard_screen` | POST https://memoryguard.grindfree.net/v1/screen | screen before writing to agent memory · $0.002 |
 | `wireshield_scan` | POST https://wireshield.grindfree.net/v1/scan | outbound leak check on agent output · $0.002 |
 | `docshield_scan` | POST https://docshield.grindfree.net/v1/scan | hidden instructions in PDF/Office/HTML/MD; `path` reads a local file · $0.004 |
+| `saferead_read` | POST https://saferead.grindfree.net/v1/read | fetch a URL as clean Markdown with hidden text + prompt injections removed/flagged; SSRF-guarded · $0.003 |
 | `grindfree_discovery` | (local unpaid probes) | well-known / 402 challenge summary |
 
 ## Honesty
