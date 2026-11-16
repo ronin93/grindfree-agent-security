@@ -5,13 +5,14 @@ MCP server + client snippets for GrindFree’s pay-per-call agent security APIs 
 | Service | Endpoint | Price | What it does |
 |---|---|---|---|
 | **PromptShield** | `POST https://promptshield.grindfree.net/v1/screen` · `/v1/clean` | $0.002 | Prompt-injection screen + HTML→LLM clean text |
-| **CrawlSafe** | `POST https://crawlsafe.grindfree.net/v1/check` | $0.002 | robots.txt / X-Robots-Tag crawl gate (SSRF-guarded; **not** malware scanning) |
+| **CrawlSafe** | `POST https://crawlsafe.grindfree.net/v1/check` | $0.001 | robots.txt / X-Robots-Tag crawl gate (SSRF-guarded; **not** malware scanning) |
 | **ToolGuard** | `POST https://toolguard.grindfree.net/v1/evaluate` | $0.002 | Pre-tool-call `allow \| review \| deny` policy gate |
 | **CommandGuard** | `POST https://commandguard.grindfree.net/v1/command` · `/v1/sql` | $0.001 | Shell command + SQL check before execution: `allow \| warn \| block` |
 | **MemoryGuard** | `POST https://memoryguard.grindfree.net/v1/screen` | $0.002 | Screen content before it is written to agent memory (planted instructions, persistence, secrets/PII) |
 | **WireShield** | `POST https://wireshield.grindfree.net/v1/scan` | $0.002 | Outbound leak check on agent output (zero-click image exfil, URL smuggling, canaries, prompt leakage) |
 | **DocShield** | `POST https://docshield.grindfree.net/v1/scan` | $0.004 | Hidden instructions in PDF / DOCX / XLSX / PPTX / HTML / Markdown before the agent reads them |
-| **SafeRead** | `POST https://saferead.grindfree.net/v1/read` | $0.003 | Fetch a URL as clean Markdown with hidden text and prompt injections removed or flagged (SSRF-guarded; HTML, text, JSON, PDF) |
+| **SafeRead** | `POST https://saferead.grindfree.net/v1/read` | $0.002 | Fetch a URL as clean Markdown with hidden text and prompt injections removed or flagged (SSRF-guarded; HTML, text, JSON, PDF) |
+| **DocRead** | `POST https://docread.grindfree.net/v1/convert` (also `GET ?url=`) | $0.003 | Convert any document (PDF, DOCX, XLSX, PPTX, HTML, text; URL or upload) to clean Markdown for AI, with hidden text and prompt injections stripped and a removal report |
 | **AskHuman** | `POST https://askhuman.grindfree.net/v1/request` | $0.03 | Human-in-the-loop approval: one-tap approve/deny/edit link (ntfy, Slack, Discord, webhook); decision by poll, long-poll or signed callback; fails closed |
 | **TrifectaGate** | `POST https://trifectagate.grindfree.net/v1/check` | $0.002 | Session exfiltration gate: private data + untrusted content + outbound action → allow / review / block (sticky per-session taint, URL smuggling, secrets in payload) |
 
@@ -63,6 +64,9 @@ Claude Desktop / Cursor-style config:
 - `memoryguard_screen` — check content before saving it to long-term memory
 - `wireshield_scan` — check agent output before rendering/sending it
 - `docshield_scan` — check a local file (`path`), base64 bytes, or HTML/Markdown for hidden instructions (max 3 MB)
+- `saferead_read` — fetch a web page as clean Markdown with hidden text and prompt injections removed
+- `docread_convert` — convert a document (`url`, local `path`, base64 or inline content) to clean Markdown for the model, injections stripped, with a removal report (max 3 MB)
+- `trifectagate_check` / `askhuman_request` / `askhuman_status` — exfiltration gate and human approval
 - `grindfree_discovery` — unpaid 402 / discovery probe (no spend)
 
 ---

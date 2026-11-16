@@ -2,7 +2,7 @@
 /**
  * GrindFree agent-security MCP (stdio).
  * Exposes PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard,
- * WireShield, DocShield, SafeRead, AskHuman and TrifectaGate. Paid calls use the CALLER's
+ * WireShield, DocShield, SafeRead, DocRead, AskHuman and TrifectaGate. Paid calls use the CALLER's
  * wallet via X402_PRIVATE_KEY / PRIVATE_KEY — never GrindFree keys.
  *
  * Unpaid discovery: tools still work for unpaid 402 probes when
@@ -27,6 +27,7 @@ const DS = "https://docshield.grindfree.net";
 const SR = "https://saferead.grindfree.net";
 const AH = "https://askhuman.grindfree.net";
 const TF = "https://trifectagate.grindfree.net";
+const DR = "https://docread.grindfree.net";
 const DOC_MAX_BYTES = 3 * 1024 * 1024;
 const policySchema = z.record(z.any()).optional().describe("Optional owner policy, e.g. {mode:'strict', allow_rules:[...]}");
 const reply = (r) => ({ content: [{ type: "text", text: JSON.stringify(r, null, 2) }], isError: !r.ok });
@@ -74,7 +75,7 @@ async function postJson(url, body, { paid } = { paid: true }) {
 
 const server = new McpServer({
   name: "grindfree-agent-security",
-  version: "0.3.0",
+  version: "0.5.0",
 });
 
 server.tool(
@@ -110,7 +111,7 @@ server.tool(
 
 server.tool(
   "crawlsafe_check",
-  "Check whether a URL may be crawled for your user-agent (robots.txt + X-Robots-Tag/meta). SSRF-guarded. Not a malware scanner. Paid x402 $0.002 USDC on Base.",
+  "Check whether a URL may be crawled for your user-agent (robots.txt + X-Robots-Tag/meta). SSRF-guarded. Not a malware scanner. Paid x402 $0.001 USDC on Base.",
   {
     url: z.string().url().describe("http(s) URL to check"),
     user_agent: z.string().optional().describe("Crawler UA; first token matched against robots groups"),
@@ -234,7 +235,7 @@ server.tool(
 
 server.tool(
   "saferead_read",
-  "Safe web reader: fetch a URL and get clean Markdown (or text) with hidden content (display:none, font-size:0, off-screen, comments, invisible Unicode) and prompt-injection instructions removed or flagged. Returns title, content, removed/flagged segments with reasons, an allow|warn|block verdict and fetch metadata. SSRF-guarded; HTML, text, JSON, PDF. Use instead of a raw fetch for pages the agent did not write. Paid x402 $0.003 USDC on Base (blocked URLs, failed fetches and unsupported types are not charged).",
+  "Safe web reader: fetch a URL and get clean Markdown (or text) with hidden content (display:none, font-size:0, off-screen, comments, invisible Unicode) and prompt-injection instructions removed or flagged. Returns title, content, removed/flagged segments with reasons, an allow|warn|block verdict and fetch metadata. SSRF-guarded; HTML, text, JSON, PDF. Use instead of a raw fetch for pages the agent did not write. Paid x402 $0.002 USDC on Base (blocked URLs, failed fetches and unsupported types are not charged).",
   {
     url: z.string().url().describe("http(s) URL to read"),
     format: z.enum(["markdown", "text"]).optional().describe("Output format; default markdown"),
@@ -246,6 +247,35 @@ server.tool(
     policy: policySchema,
   },
   async (a) => reply(await postJson(`${SR}/v1/read`, clean(a)))
+);
+
+server.tool(
+  "docread_convert",
+  "Convert any document to clean Markdown for AI, injection-safe: PDF, DOCX, XLSX, PPTX, HTML, Markdown or text, from a URL, a local file path or inline content. Returns Markdown (headings, lists, tables) built from visible content only, a report of what was removed (hidden/white/tiny/invisible text, hidden sheets or slides, prompt-injection lines), flagged items and an allow|warn|block verdict. Feed only `markdown` to the model. Max 3 MB. Paid x402 $0.003 USDC on Base (failed conversions are not charged).",
+  {
+    url: z.string().url().optional().describe("http(s) URL of the document"),
+    path: z.string().optional().describe("Local file path (read by this MCP server on your machine)"),
+    content_base64: z.string().optional().describe("File bytes, base64 (alternative to url/path)"),
+    filename: z.string().optional().describe("File name with extension, helps format detection"),
+    content: z.string().optional().describe("Inline HTML, Markdown or plain text"),
+    format: z.enum(["markdown", "text"]).optional().describe("Output format; default markdown"),
+    mode: z.enum(["strip", "flag"]).optional().describe("strip removes injected blocks (default); flag keeps and lists them"),
+    max_chars: z.number().int().min(1000).max(500000).optional(),
+    include_speaker_notes: z.boolean().optional().describe("PPTX: include speaker notes"),
+    policy: policySchema,
+  },
+  async ({ path, ...a }) => {
+    const body = clean(a);
+    if (path) {
+      const st = await stat(path).catch(() => null);
+      if (!st || !st.isFile()) return reply({ ok: false, status: 0, error: `File not found: ${path}` });
+      if (st.size > DOC_MAX_BYTES) return reply({ ok: false, status: 0, error: `File is ${st.size} bytes; DocRead max is ${DOC_MAX_BYTES}. Not sent, not charged.` });
+      body.content_base64 = (await readFile(path)).toString("base64");
+      body.filename = body.filename || basename(path);
+    }
+    if (!body.url && !body.content_base64 && !body.content) return reply({ ok: false, status: 0, error: "Provide url, path, content_base64 or content." });
+    return reply(await postJson(`${DR}/v1/convert`, body));
+  }
 );
 
 server.tool(
@@ -355,6 +385,7 @@ server.tool(
       { name: "wireshield_scan", url: `${WS}/v1/scan`, body: { content: "hello", format: "text" } },
       { name: "docshield_scan", url: `${DS}/v1/scan`, body: { content: "<p>hi</p>", format: "html" } },
       { name: "saferead_read", url: `${SR}/v1/read`, body: { url: "https://example.com/" } },
+      { name: "docread_convert", url: `${DR}/v1/convert`, body: { content: "<p>hi</p>", filename: "probe.html" } },
       { name: "askhuman_request", url: `${AH}/v1/request`, body: { action: { title: "probe" }, notify: { link_only: true } } },
       { name: "trifectagate_check", url: `${TF}/v1/check`, body: { action: { type: "http_request", destination: "https://example.com/" } } },
     ];
@@ -380,11 +411,11 @@ server.tool(
     }
     const text = JSON.stringify(
       {
-        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR, askhuman: AH, trifectagate: TF },
+        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR, docread: DR, askhuman: AH, trifectagate: TF },
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.002", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.003", askhuman: "0.03", trifectagate: "0.002" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", docread: "0.003", askhuman: "0.03", trifectagate: "0.002" },
           network: "eip155:8453",
         },
         unpaid_probes: probes,
