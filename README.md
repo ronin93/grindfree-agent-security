@@ -64,8 +64,10 @@ Claude Desktop / Cursor-style config:
 - `memoryguard_screen` — check content before saving it to long-term memory
 - `wireshield_scan` — check agent output before rendering/sending it
 - `docshield_scan` — check a local file (`path`), base64 bytes, or HTML/Markdown for hidden instructions (max 3 MB)
-- `saferead_read` — fetch a web page as clean Markdown with hidden text and prompt injections removed
-- `docread_convert` — convert a document (`url`, local `path`, base64 or inline content) to clean Markdown for the model, injections stripped, with a removal report (max 3 MB)
+- `saferead_read` — fetch a web page as clean Markdown with hidden text and prompt injections removed (honours robots.txt)
+- `saferead_read_batch` — up to 10 web pages as clean Markdown in one call ($0.002 per URL, all-or-nothing)
+- `docread_convert` — convert PDF to Markdown (also DOCX/XLSX/PPTX/HTML; `url`, local `path`, base64 or inline content), injections stripped, with a removal report (max 3 MB)
+- `docread_tables` — extract tables from PDF/DOCX/XLSX/PPTX/HTML to typed JSON ($0.004)
 - `trifectagate_check` / `askhuman_request` / `askhuman_status` — exfiltration gate and human approval
 - `grindfree_discovery` — unpaid 402 / discovery probe (no spend)
 

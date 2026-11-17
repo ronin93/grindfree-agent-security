@@ -7,12 +7,12 @@
     "url": "https://github.com/ronin93/grindfree-agent-security",
     "source": "github"
   },
-  "version": "0.5.0",
+  "version": "0.6.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@grindfree/agent-security-mcp",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "transport": {
         "type": "stdio"
       },

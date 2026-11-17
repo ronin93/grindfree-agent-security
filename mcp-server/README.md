@@ -40,8 +40,10 @@ Claude Desktop / Cursor MCP config example:
 | `memoryguard_screen` | POST https://memoryguard.grindfree.net/v1/screen | screen before writing to agent memory · $0.002 |
 | `wireshield_scan` | POST https://wireshield.grindfree.net/v1/scan | outbound leak check on agent output · $0.002 |
 | `docshield_scan` | POST https://docshield.grindfree.net/v1/scan | hidden instructions in PDF/Office/HTML/MD; `path` reads a local file · $0.004 |
-| `saferead_read` | POST https://saferead.grindfree.net/v1/read | fetch a URL as clean Markdown with hidden text + prompt injections removed/flagged; SSRF-guarded · $0.002 |
-| `docread_convert` | POST https://docread.grindfree.net/v1/convert | any document (PDF/DOCX/XLSX/PPTX/HTML/TXT; url, local path or base64) → clean Markdown, hidden text + injections stripped, removal report · $0.003 |
+| `saferead_read` | POST https://saferead.grindfree.net/v1/read | fetch a URL as clean Markdown with hidden text + prompt injections removed/flagged; honours robots.txt; SSRF-guarded · $0.002 (only successful reads charged) |
+| `saferead_read_batch` | POST https://saferead.grindfree.net/v1/read-batch | up to 10 URLs as clean Markdown in one call; all-or-nothing (any failure → 424, not charged) · $0.002 per URL |
+| `docread_convert` | POST https://docread.grindfree.net/v1/convert | convert PDF to Markdown (also DOCX/XLSX/PPTX/HTML/TXT; url, local path or base64), hidden text + injections removed; `include_findings` adds DocShield's full scan · $0.003 |
+| `docread_tables` | POST https://docread.grindfree.net/v1/tables | tables in PDF/DOCX/XLSX/PPTX/HTML → typed JSON (columns, column types, rows); injected cells replaced · $0.004 |
 | `askhuman_request` | POST https://askhuman.grindfree.net/v1/request | ask the human owner to approve/deny/edit one action (ntfy, Slack, Discord, webhook or link) · $0.03 |
 | `askhuman_status` | GET https://askhuman.grindfree.net/status/{id} | decision for a request; long-poll with wait · free |
 | `trifectagate_check` | POST https://trifectagate.grindfree.net/v1/check | session exfiltration gate before any outbound action: allow/review/block · $0.002 |

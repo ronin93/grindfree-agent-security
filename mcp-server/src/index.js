@@ -75,7 +75,7 @@ async function postJson(url, body, { paid } = { paid: true }) {
 
 const server = new McpServer({
   name: "grindfree-agent-security",
-  version: "0.5.0",
+  version: "0.6.0",
 });
 
 server.tool(
@@ -235,7 +235,7 @@ server.tool(
 
 server.tool(
   "saferead_read",
-  "Safe web reader: fetch a URL and get clean Markdown (or text) with hidden content (display:none, font-size:0, off-screen, comments, invisible Unicode) and prompt-injection instructions removed or flagged. Returns title, content, removed/flagged segments with reasons, an allow|warn|block verdict and fetch metadata. SSRF-guarded; HTML, text, JSON, PDF. Use instead of a raw fetch for pages the agent did not write. Paid x402 $0.002 USDC on Base (blocked URLs, failed fetches and unsupported types are not charged).",
+  "Read a web page as clean Markdown for AI: fetch a URL and get LLM-ready Markdown (or text) with hidden content (display:none, font-size:0, off-screen, comments, invisible Unicode) and prompt-injection instructions removed or flagged. Returns title, content, removed/flagged segments with reasons, an allow|warn|block verdict, fetch metadata and the robots.txt decision. Honours robots.txt (pages disallowed for SafeReadBot return 403, not charged). SSRF-guarded. Use instead of a raw fetch for pages the agent did not write. Paid x402 $0.002 USDC on Base; only successful reads are charged.",
   {
     url: z.string().url().describe("http(s) URL to read"),
     format: z.enum(["markdown", "text"]).optional().describe("Output format; default markdown"),
@@ -250,8 +250,21 @@ server.tool(
 );
 
 server.tool(
+  "saferead_read_batch",
+  "Read up to 10 web pages as clean Markdown in one call: each URL returns LLM-ready Markdown with hidden text and prompt injections removed, plus a verdict and robots.txt decision. Honours robots.txt. All-or-nothing: if any URL fails (robots disallow, blocked host, fetch error) the call returns 424 with per-URL errors and nothing is charged. Paid x402 $0.002 USDC per URL on Base (e.g. 5 URLs = $0.010).",
+  {
+    urls: z.array(z.string().url()).min(1).max(10).describe("1-10 http(s) URLs (duplicates are merged)"),
+    format: z.enum(["markdown", "text"]).optional().describe("Output format; default markdown"),
+    mode: z.enum(["strip", "flag"]).optional().describe("strip removes injected blocks (default); flag keeps and lists them"),
+    max_chars: z.number().int().min(1000).max(50000).optional().describe("Max content characters per page (default 20000)"),
+    main_content: z.boolean().optional().describe("Prefer <main>/<article>, drop nav/footer (default true)"),
+  },
+  async (a) => reply(await postJson(`${SR}/v1/read-batch`, clean(a)))
+);
+
+server.tool(
   "docread_convert",
-  "Convert any document to clean Markdown for AI, injection-safe: PDF, DOCX, XLSX, PPTX, HTML, Markdown or text, from a URL, a local file path or inline content. Returns Markdown (headings, lists, tables) built from visible content only, a report of what was removed (hidden/white/tiny/invisible text, hidden sheets or slides, prompt-injection lines), flagged items and an allow|warn|block verdict. Feed only `markdown` to the model. Max 3 MB. Paid x402 $0.003 USDC on Base (failed conversions are not charged).",
+  "Convert PDF to Markdown for AI, also DOCX, XLSX, PPTX, HTML, Markdown or text, from a URL, a local file path or inline content. Returns Markdown (headings, lists, tables) built from visible content only, a report of what was removed (hidden/white/tiny/invisible text, hidden sheets or slides, prompt-injection lines), flagged items and an allow|warn|block verdict. Feed only `markdown` to the model. include_findings=true adds DocShield's full scan of every channel. Max 3 MB. Paid x402 $0.003 USDC on Base; only successful conversions are charged.",
   {
     url: z.string().url().optional().describe("http(s) URL of the document"),
     path: z.string().optional().describe("Local file path (read by this MCP server on your machine)"),
@@ -262,6 +275,7 @@ server.tool(
     mode: z.enum(["strip", "flag"]).optional().describe("strip removes injected blocks (default); flag keeps and lists them"),
     max_chars: z.number().int().min(1000).max(500000).optional(),
     include_speaker_notes: z.boolean().optional().describe("PPTX: include speaker notes"),
+    include_findings: z.boolean().optional().describe("Also return docshield_findings: every channel scanned, what was removed and why"),
     policy: policySchema,
   },
   async ({ path, ...a }) => {
@@ -275,6 +289,33 @@ server.tool(
     }
     if (!body.url && !body.content_base64 && !body.content) return reply({ ok: false, status: 0, error: "Provide url, path, content_base64 or content." });
     return reply(await postJson(`${DR}/v1/convert`, body));
+  }
+);
+
+server.tool(
+  "docread_tables",
+  "Extract tables from PDF, DOCX, XLSX, PPTX or HTML to typed JSON, from a URL, a local file path or inline content. Each visible table returns columns, column_types (number, currency, percent, date, boolean, string) and typed rows; as_records adds row objects. Hidden sheets, rows and text are never included; cells carrying prompt injections are replaced and listed in removed. No tables found returns 422, not charged. Max 3 MB. Paid x402 $0.004 USDC on Base; only successful extractions are charged.",
+  {
+    url: z.string().url().optional().describe("http(s) URL of the document"),
+    path: z.string().optional().describe("Local file path (read by this MCP server on your machine)"),
+    content_base64: z.string().optional().describe("File bytes, base64 (alternative to url/path)"),
+    filename: z.string().optional().describe("File name with extension, helps format detection"),
+    content: z.string().optional().describe("Inline HTML or Markdown containing tables"),
+    header: z.boolean().optional().describe("First row of each table is column names (default true)"),
+    as_records: z.boolean().optional().describe("Also return rows as objects keyed by column name"),
+    max_tables: z.number().int().min(1).max(50).optional(),
+  },
+  async ({ path, ...a }) => {
+    const body = clean(a);
+    if (path) {
+      const st = await stat(path).catch(() => null);
+      if (!st || !st.isFile()) return reply({ ok: false, status: 0, error: `File not found: ${path}` });
+      if (st.size > DOC_MAX_BYTES) return reply({ ok: false, status: 0, error: `File is ${st.size} bytes; DocRead max is ${DOC_MAX_BYTES}. Not sent, not charged.` });
+      body.content_base64 = (await readFile(path)).toString("base64");
+      body.filename = body.filename || basename(path);
+    }
+    if (!body.url && !body.content_base64 && !body.content) return reply({ ok: false, status: 0, error: "Provide url, path, content_base64 or content." });
+    return reply(await postJson(`${DR}/v1/tables`, body));
   }
 );
 
@@ -385,7 +426,9 @@ server.tool(
       { name: "wireshield_scan", url: `${WS}/v1/scan`, body: { content: "hello", format: "text" } },
       { name: "docshield_scan", url: `${DS}/v1/scan`, body: { content: "<p>hi</p>", format: "html" } },
       { name: "saferead_read", url: `${SR}/v1/read`, body: { url: "https://example.com/" } },
+      { name: "saferead_read_batch", url: `${SR}/v1/read-batch`, body: { urls: ["https://example.com/", "https://example.org/"] } },
       { name: "docread_convert", url: `${DR}/v1/convert`, body: { content: "<p>hi</p>", filename: "probe.html" } },
+      { name: "docread_tables", url: `${DR}/v1/tables`, body: { content: "<table><tr><th>a</th></tr><tr><td>1</td></tr></table>", filename: "probe.html" } },
       { name: "askhuman_request", url: `${AH}/v1/request`, body: { action: { title: "probe" }, notify: { link_only: true } } },
       { name: "trifectagate_check", url: `${TF}/v1/check`, body: { action: { type: "http_request", destination: "https://example.com/" } } },
     ];
@@ -415,7 +458,7 @@ server.tool(
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", docread: "0.003", askhuman: "0.03", trifectagate: "0.002" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002" },
           network: "eip155:8453",
         },
         unpaid_probes: probes,
