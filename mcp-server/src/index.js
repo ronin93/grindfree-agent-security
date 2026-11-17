@@ -75,7 +75,7 @@ async function postJson(url, body, { paid } = { paid: true }) {
 
 const server = new McpServer({
   name: "grindfree-agent-security",
-  version: "0.6.0",
+  version: "0.7.0",
 });
 
 server.tool(
@@ -247,6 +247,20 @@ server.tool(
     policy: policySchema,
   },
   async (a) => reply(await postJson(`${SR}/v1/read`, clean(a)))
+);
+
+server.tool(
+  "saferead_fetch",
+  "Fetch a web page URL as clean Markdown for AI (plain read): LLM-ready Markdown without scripts, styles, nav or footers, plus title, fetch metadata and the robots.txt decision. Honours robots.txt; SSRF-guarded. NO hidden-text removal or prompt-injection screening: for pages the agent did not write, use saferead_read instead. Paid x402 $0.001 USDC on Base; only successful reads are charged.",
+  {
+    url: z.string().url().describe("http(s) URL to fetch"),
+    format: z.enum(["markdown", "text"]).optional().describe("Output format; default markdown"),
+    max_chars: z.number().int().min(1000).max(200000).optional().describe("Max content characters (default 50000)"),
+    include_links: z.boolean().optional(),
+    include_images: z.boolean().optional(),
+    main_content: z.boolean().optional().describe("Prefer <main>/<article>, drop nav/footer (default true)"),
+  },
+  async (a) => reply(await postJson(`${SR}/v1/fetch`, clean(a)))
 );
 
 server.tool(
@@ -427,6 +441,7 @@ server.tool(
       { name: "docshield_scan", url: `${DS}/v1/scan`, body: { content: "<p>hi</p>", format: "html" } },
       { name: "saferead_read", url: `${SR}/v1/read`, body: { url: "https://example.com/" } },
       { name: "saferead_read_batch", url: `${SR}/v1/read-batch`, body: { urls: ["https://example.com/", "https://example.org/"] } },
+      { name: "saferead_fetch", url: `${SR}/v1/fetch`, body: { url: "https://example.com/" } },
       { name: "docread_convert", url: `${DR}/v1/convert`, body: { content: "<p>hi</p>", filename: "probe.html" } },
       { name: "docread_tables", url: `${DR}/v1/tables`, body: { content: "<table><tr><th>a</th></tr><tr><td>1</td></tr></table>", filename: "probe.html" } },
       { name: "askhuman_request", url: `${AH}/v1/request`, body: { action: { title: "probe" }, notify: { link_only: true } } },
@@ -458,7 +473,7 @@ server.tool(
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", saferead_fetch_plain: "0.001", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002" },
           network: "eip155:8453",
         },
         unpaid_probes: probes,

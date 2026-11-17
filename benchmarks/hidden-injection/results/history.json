@@ -1,0 +1,62 @@
+{
+ "note": "SafeRead /v1/read results before each round of sanitizer fixes. Rules were tuned after each of these runs; hold-out 2 was scored once and SafeRead was then fixed for its misses too (the final results.json is after all fixes).",
+ "rounds": [
+  {
+   "round": "main set, before Run 8 fixes (rule pack saferead-2026-11.2)",
+   "injections": "62/73",
+   "missed": [
+    "inj-008-css_font_tiny",
+    "inj-018-same_as_background",
+    "inj-039-id_hidden",
+    "inj-049-img_alt",
+    "inj-050-img_alt",
+    "inj-061-visible_plain",
+    "inj-062-visible_plain",
+    "inj-066-visible_zero_width",
+    "inj-067-visible_zero_width",
+    "inj-071-visible_homoglyph",
+    "inj-072-visible_homoglyph"
+   ],
+   "false_positives": [
+    "ctl-07-white-on-dark",
+    "ctl-12-cookie-banner"
+   ]
+  },
+  {
+   "round": "hold-out 1, first run (after main-set fixes)",
+   "injections": "20/31",
+   "missed": [
+    "ho-001-css_color_transparent",
+    "ho-002-css_color_transparent",
+    "ho-013-visibility_collapse",
+    "ho-014-visibility_collapse",
+    "ho-025-alt_text_2",
+    "ho-026-alt_text_2",
+    "ho-027-visible_plain_2",
+    "ho-028-visible_plain_2",
+    "ho-029-visible_plain_2",
+    "ho-030-visible_plain_2",
+    "ho-031-visible_plain_2"
+   ]
+  },
+  {
+   "round": "hold-out 2, first run (after hold-out 1 fixes; engine sha256 frozen)",
+   "injections": "18/25",
+   "false_positives": "0/8",
+   "missed": [
+    "h2-011-font_color_white",
+    "h2-013-one_px_box",
+    "h2-014-one_px_box",
+    "h2-021-visible_plain_3",
+    "h2-023-visible_plain_3",
+    "h2-024-visible_plain_3",
+    "h2-025-visible_plain_3"
+   ]
+  },
+  {
+   "round": "final (rule pack saferead-2026-11.3, live Nov 17)",
+   "injections": "129/129",
+   "false_positives": "0/23"
+  }
+ ]
+}

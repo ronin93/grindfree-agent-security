@@ -1,0 +1,191 @@
+{
+ "summary": {
+  "pages": 19,
+  "raw_html_tokens": 1233740,
+  "saferead_read_tokens": 124625,
+  "plain_fetch_tokens": 126982,
+  "aggregate_reduction_read": 0.899,
+  "aggregate_reduction_plain": 0.8971,
+  "median_page_reduction_read": 0.8599,
+  "pages_with_content_removed": [
+   "https://en.wikipedia.org/wiki/Prompt_injection"
+  ],
+  "pages_flagged_warn": [
+   "https://go.dev/doc/effective_go"
+  ],
+  "tokenizer": "cl100k_base"
+ },
+ "rows": [
+  {
+   "url": "https://en.wikipedia.org/wiki/Sourdough",
+   "raw_html_tokens": 180847,
+   "saferead_read_tokens": 13580,
+   "plain_fetch_tokens": 13599,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Prompt_injection",
+   "raw_html_tokens": 58046,
+   "saferead_read_tokens": 8920,
+   "plain_fetch_tokens": 9250,
+   "verdict": "block",
+   "removed": 2,
+   "flagged": 0
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Bicycle_brake",
+   "raw_html_tokens": 140268,
+   "saferead_read_tokens": 12028,
+   "plain_fetch_tokens": 12040,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img",
+   "raw_html_tokens": 63578,
+   "saferead_read_tokens": 10879,
+   "plain_fetch_tokens": 10879,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/display",
+   "raw_html_tokens": 102453,
+   "saferead_read_tokens": 8141,
+   "plain_fetch_tokens": 8141,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://docs.python.org/3/tutorial/datastructures.html",
+   "raw_html_tokens": 33915,
+   "saferead_read_tokens": 8839,
+   "plain_fetch_tokens": 8839,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://doc.rust-lang.org/book/ch01-01-installation.html",
+   "raw_html_tokens": 10879,
+   "saferead_read_tokens": 1524,
+   "plain_fetch_tokens": 1524,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://go.dev/doc/effective_go",
+   "raw_html_tokens": 35991,
+   "saferead_read_tokens": 12140,
+   "plain_fetch_tokens": 12140,
+   "verdict": "warn",
+   "removed": 0,
+   "flagged": 1
+  },
+  {
+   "url": "https://www.gnu.org/philosophy/free-sw.en.html",
+   "raw_html_tokens": 13945,
+   "saferead_read_tokens": 7905,
+   "plain_fetch_tokens": 7905,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://www.rfc-editor.org/rfc/rfc9309.html",
+   "raw_html_tokens": 24992,
+   "saferead_read_tokens": 7508,
+   "plain_fetch_tokens": 9117,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://blog.cloudflare.com/",
+   "raw_html_tokens": 74914,
+   "saferead_read_tokens": 2671,
+   "plain_fetch_tokens": 2671,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://www.bbc.com/news",
+   "raw_html_tokens": 131344,
+   "saferead_read_tokens": 2547,
+   "plain_fetch_tokens": 2934,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://www.w3.org/WAI/fundamentals/accessibility-intro/",
+   "raw_html_tokens": 21241,
+   "saferead_read_tokens": 1547,
+   "plain_fetch_tokens": 1547,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://react.dev/learn",
+   "raw_html_tokens": 92015,
+   "saferead_read_tokens": 3953,
+   "plain_fetch_tokens": 3953,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://nodejs.org/en/learn/getting-started/introduction-to-nodejs",
+   "raw_html_tokens": 32563,
+   "saferead_read_tokens": 1051,
+   "plain_fetch_tokens": 1051,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://www.postgresql.org/docs/current/tutorial-select.html",
+   "raw_html_tokens": 5377,
+   "saferead_read_tokens": 1950,
+   "plain_fetch_tokens": 1950,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://simonwillison.net/",
+   "raw_html_tokens": 35377,
+   "saferead_read_tokens": 13919,
+   "plain_fetch_tokens": 13919,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://news.ycombinator.com/",
+   "raw_html_tokens": 11300,
+   "saferead_read_tokens": 4766,
+   "plain_fetch_tokens": 4766,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  },
+  {
+   "url": "https://stripe.com/docs/payments",
+   "raw_html_tokens": 164695,
+   "saferead_read_tokens": 757,
+   "plain_fetch_tokens": 757,
+   "verdict": "allow",
+   "removed": 0,
+   "flagged": 0
+  }
+ ]
+}

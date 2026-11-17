@@ -41,6 +41,7 @@ Claude Desktop / Cursor MCP config example:
 | `wireshield_scan` | POST https://wireshield.grindfree.net/v1/scan | outbound leak check on agent output · $0.002 |
 | `docshield_scan` | POST https://docshield.grindfree.net/v1/scan | hidden instructions in PDF/Office/HTML/MD; `path` reads a local file · $0.004 |
 | `saferead_read` | POST https://saferead.grindfree.net/v1/read | fetch a URL as clean Markdown with hidden text + prompt injections removed/flagged; honours robots.txt; SSRF-guarded · $0.002 (only successful reads charged) |
+| `saferead_fetch` | POST https://saferead.grindfree.net/v1/fetch | plain read: URL as clean Markdown, no injection screening (use `saferead_read` for untrusted pages); honours robots.txt · $0.001 |
 | `saferead_read_batch` | POST https://saferead.grindfree.net/v1/read-batch | up to 10 URLs as clean Markdown in one call; all-or-nothing (any failure → 424, not charged) · $0.002 per URL |
 | `docread_convert` | POST https://docread.grindfree.net/v1/convert | convert PDF to Markdown (also DOCX/XLSX/PPTX/HTML/TXT; url, local path or base64), hidden text + injections removed; `include_findings` adds DocShield's full scan · $0.003 |
 | `docread_tables` | POST https://docread.grindfree.net/v1/tables | tables in PDF/DOCX/XLSX/PPTX/HTML → typed JSON (columns, column types, rows); injected cells replaced · $0.004 |

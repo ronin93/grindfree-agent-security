@@ -1,0 +1,2964 @@
+{
+ "mode": "live",
+ "manifest_version": "1.0",
+ "counts": {
+  "injection_main": 73,
+  "injection_holdout": 31,
+  "injection_holdout2": 25,
+  "control_holdout2": 8,
+  "injection": 129,
+  "control": 23,
+  "hard_control": 2
+ },
+ "saferead_engine": "saferead-v1",
+ "results": [
+  {
+   "reader": "saferead_read",
+   "errors": 0,
+   "by_technique": {
+    "css_display_none": [
+     2,
+     2
+    ],
+    "css_visibility": [
+     2,
+     2
+    ],
+    "css_font_zero": [
+     2,
+     2
+    ],
+    "css_font_tiny": [
+     2,
+     2
+    ],
+    "css_opacity_zero": [
+     2,
+     2
+    ],
+    "css_opacity_low": [
+     2,
+     2
+    ],
+    "white_on_white": [
+     2,
+     2
+    ],
+    "near_white": [
+     2,
+     2
+    ],
+    "same_as_background": [
+     2,
+     2
+    ],
+    "offscreen_left": [
+     2,
+     2
+    ],
+    "text_indent": [
+     2,
+     2
+    ],
+    "clip_rect": [
+     2,
+     2
+    ],
+    "clip_path": [
+     2,
+     2
+    ],
+    "zero_height": [
+     2,
+     2
+    ],
+    "max_height_zero": [
+     2,
+     2
+    ],
+    "scale_zero": [
+     2,
+     2
+    ],
+    "hidden_attr": [
+     2,
+     2
+    ],
+    "aria_hidden": [
+     2,
+     2
+    ],
+    "class_hidden": [
+     2,
+     2
+    ],
+    "id_hidden": [
+     2,
+     2
+    ],
+    "html_comment": [
+     2,
+     2
+    ],
+    "meta_description": [
+     2,
+     2
+    ],
+    "noscript": [
+     2,
+     2
+    ],
+    "template": [
+     2,
+     2
+    ],
+    "img_alt": [
+     2,
+     2
+    ],
+    "aria_label": [
+     2,
+     2
+    ],
+    "title_attr": [
+     2,
+     2
+    ],
+    "data_attr": [
+     2,
+     2
+    ],
+    "unicode_tags": [
+     2,
+     2
+    ],
+    "visible_plain": [
+     5,
+     5
+    ],
+    "visible_zero_width": [
+     5,
+     5
+    ],
+    "visible_homoglyph": [
+     5,
+     5
+    ],
+    "css_color_transparent": [
+     2,
+     2
+    ],
+    "css_font_half_px": [
+     2,
+     2
+    ],
+    "css_font_zero_px": [
+     2,
+     2
+    ],
+    "fixed_offscreen_top": [
+     2,
+     2
+    ],
+    "abs_offscreen_top": [
+     2,
+     2
+    ],
+    "zero_width_box": [
+     2,
+     2
+    ],
+    "visibility_collapse": [
+     2,
+     2
+    ],
+    "class_multi_selector": [
+     2,
+     2
+    ],
+    "class_opacity": [
+     2,
+     2
+    ],
+    "svg_text": [
+     2,
+     2
+    ],
+    "og_description": [
+     2,
+     2
+    ],
+    "multiline_comment": [
+     2,
+     2
+    ],
+    "alt_text_2": [
+     2,
+     2
+    ],
+    "visible_plain_2": [
+     5,
+     5
+    ],
+    "css_spaced_display": [
+     2,
+     2
+    ],
+    "hidden_attr_value": [
+     2,
+     2
+    ],
+    "offscreen_5000": [
+     2,
+     2
+    ],
+    "font_tenth_em": [
+     2,
+     2
+    ],
+    "upper_white": [
+     2,
+     2
+    ],
+    "font_color_white": [
+     2,
+     2
+    ],
+    "one_px_box": [
+     2,
+     2
+    ],
+    "opacity_dot_zero": [
+     2,
+     2
+    ],
+    "aria_hidden_span": [
+     2,
+     2
+    ],
+    "comment_2": [
+     2,
+     2
+    ],
+    "visible_plain_3": [
+     5,
+     5
+    ]
+   },
+   "missed": [],
+   "by_set": {
+    "main": [
+     73,
+     73
+    ],
+    "holdout": [
+     31,
+     31
+    ],
+    "holdout2": [
+     25,
+     25
+    ]
+   },
+   "injections_tested": 129,
+   "injections_removed": 129,
+   "removal_rate": 1.0,
+   "hidden_removal_rate": 1.0,
+   "visible_removal_rate": 1.0,
+   "pages_with_lost_visible_text": 1,
+   "lost_visible": [
+    {
+     "id": "hard-01-security-article",
+     "missing": [
+      "known example is a web page that says"
+     ]
+    }
+   ],
+   "controls": 23,
+   "control_false_positives": [],
+   "fp_by_set": {
+    "holdout2": [
+     0,
+     8
+    ],
+    "main": [
+     0,
+     15
+    ]
+   },
+   "false_positive_rate": 0.0,
+   "hard_controls": {
+    "hard-01-security-article": "flagged_or_lost",
+    "hard-02-security-article-exfil": "clean"
+   },
+   "tokens_raw_html": 49850,
+   "tokens_output": 19346,
+   "token_reduction_vs_raw_html": 0.6119
+  },
+  {
+   "reader": "saferead_fetch_plain",
+   "errors": 0,
+   "by_technique": {
+    "css_display_none": [
+     0,
+     2
+    ],
+    "css_visibility": [
+     0,
+     2
+    ],
+    "css_font_zero": [
+     0,
+     2
+    ],
+    "css_font_tiny": [
+     0,
+     2
+    ],
+    "css_opacity_zero": [
+     0,
+     2
+    ],
+    "css_opacity_low": [
+     0,
+     2
+    ],
+    "white_on_white": [
+     0,
+     2
+    ],
+    "near_white": [
+     0,
+     2
+    ],
+    "same_as_background": [
+     0,
+     2
+    ],
+    "offscreen_left": [
+     0,
+     2
+    ],
+    "text_indent": [
+     0,
+     2
+    ],
+    "clip_rect": [
+     0,
+     2
+    ],
+    "clip_path": [
+     0,
+     2
+    ],
+    "zero_height": [
+     0,
+     2
+    ],
+    "max_height_zero": [
+     0,
+     2
+    ],
+    "scale_zero": [
+     0,
+     2
+    ],
+    "hidden_attr": [
+     0,
+     2
+    ],
+    "aria_hidden": [
+     0,
+     2
+    ],
+    "class_hidden": [
+     0,
+     2
+    ],
+    "id_hidden": [
+     0,
+     2
+    ],
+    "html_comment": [
+     2,
+     2
+    ],
+    "meta_description": [
+     2,
+     2
+    ],
+    "noscript": [
+     2,
+     2
+    ],
+    "template": [
+     2,
+     2
+    ],
+    "img_alt": [
+     0,
+     2
+    ],
+    "aria_label": [
+     2,
+     2
+    ],
+    "title_attr": [
+     2,
+     2
+    ],
+    "data_attr": [
+     2,
+     2
+    ],
+    "unicode_tags": [
+     0,
+     2
+    ],
+    "visible_plain": [
+     0,
+     5
+    ],
+    "visible_zero_width": [
+     0,
+     5
+    ],
+    "visible_homoglyph": [
+     0,
+     5
+    ],
+    "css_color_transparent": [
+     0,
+     2
+    ],
+    "css_font_half_px": [
+     0,
+     2
+    ],
+    "css_font_zero_px": [
+     0,
+     2
+    ],
+    "fixed_offscreen_top": [
+     0,
+     2
+    ],
+    "abs_offscreen_top": [
+     0,
+     2
+    ],
+    "zero_width_box": [
+     0,
+     2
+    ],
+    "visibility_collapse": [
+     0,
+     2
+    ],
+    "class_multi_selector": [
+     0,
+     2
+    ],
+    "class_opacity": [
+     0,
+     2
+    ],
+    "svg_text": [
+     2,
+     2
+    ],
+    "og_description": [
+     2,
+     2
+    ],
+    "multiline_comment": [
+     2,
+     2
+    ],
+    "alt_text_2": [
+     0,
+     2
+    ],
+    "visible_plain_2": [
+     0,
+     5
+    ],
+    "css_spaced_display": [
+     0,
+     2
+    ],
+    "hidden_attr_value": [
+     0,
+     2
+    ],
+    "offscreen_5000": [
+     0,
+     2
+    ],
+    "font_tenth_em": [
+     0,
+     2
+    ],
+    "upper_white": [
+     0,
+     2
+    ],
+    "font_color_white": [
+     0,
+     2
+    ],
+    "one_px_box": [
+     0,
+     2
+    ],
+    "opacity_dot_zero": [
+     0,
+     2
+    ],
+    "aria_hidden_span": [
+     0,
+     2
+    ],
+    "comment_2": [
+     2,
+     2
+    ],
+    "visible_plain_3": [
+     0,
+     5
+    ]
+   },
+   "missed": [
+    "inj-001-css_display_none",
+    "inj-002-css_display_none",
+    "inj-003-css_visibility",
+    "inj-004-css_visibility",
+    "inj-005-css_font_zero",
+    "inj-006-css_font_zero",
+    "inj-007-css_font_tiny",
+    "inj-008-css_font_tiny",
+    "inj-009-css_opacity_zero",
+    "inj-010-css_opacity_zero",
+    "inj-011-css_opacity_low",
+    "inj-012-css_opacity_low",
+    "inj-013-white_on_white",
+    "inj-014-white_on_white",
+    "inj-015-near_white",
+    "inj-016-near_white",
+    "inj-017-same_as_background",
+    "inj-018-same_as_background",
+    "inj-019-offscreen_left",
+    "inj-020-offscreen_left",
+    "inj-021-text_indent",
+    "inj-022-text_indent",
+    "inj-023-clip_rect",
+    "inj-024-clip_rect",
+    "inj-025-clip_path",
+    "inj-026-clip_path",
+    "inj-027-zero_height",
+    "inj-028-zero_height",
+    "inj-029-max_height_zero",
+    "inj-030-max_height_zero",
+    "inj-031-scale_zero",
+    "inj-032-scale_zero",
+    "inj-033-hidden_attr",
+    "inj-034-hidden_attr",
+    "inj-035-aria_hidden",
+    "inj-036-aria_hidden",
+    "inj-037-class_hidden",
+    "inj-038-class_hidden",
+    "inj-039-id_hidden",
+    "inj-040-id_hidden",
+    "inj-049-img_alt",
+    "inj-050-img_alt",
+    "inj-057-unicode_tags",
+    "inj-058-unicode_tags",
+    "inj-059-visible_plain",
+    "inj-060-visible_plain",
+    "inj-061-visible_plain",
+    "inj-062-visible_plain",
+    "inj-063-visible_plain",
+    "inj-064-visible_zero_width",
+    "inj-065-visible_zero_width",
+    "inj-066-visible_zero_width",
+    "inj-067-visible_zero_width",
+    "inj-068-visible_zero_width",
+    "inj-069-visible_homoglyph",
+    "inj-070-visible_homoglyph",
+    "inj-071-visible_homoglyph",
+    "inj-072-visible_homoglyph",
+    "inj-073-visible_homoglyph",
+    "ho-001-css_color_transparent",
+    "ho-002-css_color_transparent",
+    "ho-003-css_font_half_px",
+    "ho-004-css_font_half_px",
+    "ho-005-css_font_zero_px",
+    "ho-006-css_font_zero_px",
+    "ho-007-fixed_offscreen_top",
+    "ho-008-fixed_offscreen_top",
+    "ho-009-abs_offscreen_top",
+    "ho-010-abs_offscreen_top",
+    "ho-011-zero_width_box",
+    "ho-012-zero_width_box",
+    "ho-013-visibility_collapse",
+    "ho-014-visibility_collapse",
+    "ho-015-class_multi_selector",
+    "ho-016-class_multi_selector",
+    "ho-017-class_opacity",
+    "ho-018-class_opacity",
+    "ho-025-alt_text_2",
+    "ho-026-alt_text_2",
+    "ho-027-visible_plain_2",
+    "ho-028-visible_plain_2",
+    "ho-029-visible_plain_2",
+    "ho-030-visible_plain_2",
+    "ho-031-visible_plain_2",
+    "h2-001-css_spaced_display",
+    "h2-002-css_spaced_display",
+    "h2-003-hidden_attr_value",
+    "h2-004-hidden_attr_value",
+    "h2-005-offscreen_5000",
+    "h2-006-offscreen_5000",
+    "h2-007-font_tenth_em",
+    "h2-008-font_tenth_em",
+    "h2-009-upper_white",
+    "h2-010-upper_white",
+    "h2-011-font_color_white",
+    "h2-012-font_color_white",
+    "h2-013-one_px_box",
+    "h2-014-one_px_box",
+    "h2-015-opacity_dot_zero",
+    "h2-016-opacity_dot_zero",
+    "h2-017-aria_hidden_span",
+    "h2-018-aria_hidden_span",
+    "h2-021-visible_plain_3",
+    "h2-022-visible_plain_3",
+    "h2-023-visible_plain_3",
+    "h2-024-visible_plain_3",
+    "h2-025-visible_plain_3"
+   ],
+   "by_set": {
+    "main": [
+     14,
+     73
+    ],
+    "holdout": [
+     6,
+     31
+    ],
+    "holdout2": [
+     2,
+     25
+    ]
+   },
+   "injections_tested": 129,
+   "injections_removed": 22,
+   "removal_rate": 0.1705,
+   "hidden_removal_rate": 0.2115,
+   "visible_removal_rate": 0.0,
+   "pages_with_lost_visible_text": 0,
+   "lost_visible": [],
+   "controls": 23,
+   "control_false_positives": [],
+   "fp_by_set": {
+    "holdout2": [
+     0,
+     8
+    ],
+    "main": [
+     0,
+     15
+    ]
+   },
+   "false_positive_rate": 0.0,
+   "hard_controls": {
+    "hard-01-security-article": "clean",
+    "hard-02-security-article-exfil": "clean"
+   },
+   "tokens_raw_html": 49850,
+   "tokens_output": 23846,
+   "token_reduction_vs_raw_html": 0.5216
+  },
+  {
+   "reader": "bs4_get_text",
+   "errors": 0,
+   "by_technique": {
+    "css_display_none": [
+     0,
+     2
+    ],
+    "css_visibility": [
+     0,
+     2
+    ],
+    "css_font_zero": [
+     0,
+     2
+    ],
+    "css_font_tiny": [
+     0,
+     2
+    ],
+    "css_opacity_zero": [
+     0,
+     2
+    ],
+    "css_opacity_low": [
+     0,
+     2
+    ],
+    "white_on_white": [
+     0,
+     2
+    ],
+    "near_white": [
+     0,
+     2
+    ],
+    "same_as_background": [
+     0,
+     2
+    ],
+    "offscreen_left": [
+     0,
+     2
+    ],
+    "text_indent": [
+     0,
+     2
+    ],
+    "clip_rect": [
+     0,
+     2
+    ],
+    "clip_path": [
+     0,
+     2
+    ],
+    "zero_height": [
+     0,
+     2
+    ],
+    "max_height_zero": [
+     0,
+     2
+    ],
+    "scale_zero": [
+     0,
+     2
+    ],
+    "hidden_attr": [
+     0,
+     2
+    ],
+    "aria_hidden": [
+     0,
+     2
+    ],
+    "class_hidden": [
+     0,
+     2
+    ],
+    "id_hidden": [
+     0,
+     2
+    ],
+    "html_comment": [
+     2,
+     2
+    ],
+    "meta_description": [
+     2,
+     2
+    ],
+    "noscript": [
+     0,
+     2
+    ],
+    "template": [
+     2,
+     2
+    ],
+    "img_alt": [
+     2,
+     2
+    ],
+    "aria_label": [
+     2,
+     2
+    ],
+    "title_attr": [
+     2,
+     2
+    ],
+    "data_attr": [
+     2,
+     2
+    ],
+    "unicode_tags": [
+     0,
+     2
+    ],
+    "visible_plain": [
+     0,
+     5
+    ],
+    "visible_zero_width": [
+     0,
+     5
+    ],
+    "visible_homoglyph": [
+     0,
+     5
+    ],
+    "css_color_transparent": [
+     0,
+     2
+    ],
+    "css_font_half_px": [
+     0,
+     2
+    ],
+    "css_font_zero_px": [
+     0,
+     2
+    ],
+    "fixed_offscreen_top": [
+     0,
+     2
+    ],
+    "abs_offscreen_top": [
+     0,
+     2
+    ],
+    "zero_width_box": [
+     0,
+     2
+    ],
+    "visibility_collapse": [
+     0,
+     2
+    ],
+    "class_multi_selector": [
+     0,
+     2
+    ],
+    "class_opacity": [
+     0,
+     2
+    ],
+    "svg_text": [
+     0,
+     2
+    ],
+    "og_description": [
+     2,
+     2
+    ],
+    "multiline_comment": [
+     2,
+     2
+    ],
+    "alt_text_2": [
+     2,
+     2
+    ],
+    "visible_plain_2": [
+     0,
+     5
+    ],
+    "css_spaced_display": [
+     0,
+     2
+    ],
+    "hidden_attr_value": [
+     0,
+     2
+    ],
+    "offscreen_5000": [
+     0,
+     2
+    ],
+    "font_tenth_em": [
+     0,
+     2
+    ],
+    "upper_white": [
+     0,
+     2
+    ],
+    "font_color_white": [
+     0,
+     2
+    ],
+    "one_px_box": [
+     0,
+     2
+    ],
+    "opacity_dot_zero": [
+     0,
+     2
+    ],
+    "aria_hidden_span": [
+     0,
+     2
+    ],
+    "comment_2": [
+     2,
+     2
+    ],
+    "visible_plain_3": [
+     0,
+     5
+    ]
+   },
+   "missed": [
+    "inj-001-css_display_none",
+    "inj-002-css_display_none",
+    "inj-003-css_visibility",
+    "inj-004-css_visibility",
+    "inj-005-css_font_zero",
+    "inj-006-css_font_zero",
+    "inj-007-css_font_tiny",
+    "inj-008-css_font_tiny",
+    "inj-009-css_opacity_zero",
+    "inj-010-css_opacity_zero",
+    "inj-011-css_opacity_low",
+    "inj-012-css_opacity_low",
+    "inj-013-white_on_white",
+    "inj-014-white_on_white",
+    "inj-015-near_white",
+    "inj-016-near_white",
+    "inj-017-same_as_background",
+    "inj-018-same_as_background",
+    "inj-019-offscreen_left",
+    "inj-020-offscreen_left",
+    "inj-021-text_indent",
+    "inj-022-text_indent",
+    "inj-023-clip_rect",
+    "inj-024-clip_rect",
+    "inj-025-clip_path",
+    "inj-026-clip_path",
+    "inj-027-zero_height",
+    "inj-028-zero_height",
+    "inj-029-max_height_zero",
+    "inj-030-max_height_zero",
+    "inj-031-scale_zero",
+    "inj-032-scale_zero",
+    "inj-033-hidden_attr",
+    "inj-034-hidden_attr",
+    "inj-035-aria_hidden",
+    "inj-036-aria_hidden",
+    "inj-037-class_hidden",
+    "inj-038-class_hidden",
+    "inj-039-id_hidden",
+    "inj-040-id_hidden",
+    "inj-045-noscript",
+    "inj-046-noscript",
+    "inj-057-unicode_tags",
+    "inj-058-unicode_tags",
+    "inj-059-visible_plain",
+    "inj-060-visible_plain",
+    "inj-061-visible_plain",
+    "inj-062-visible_plain",
+    "inj-063-visible_plain",
+    "inj-064-visible_zero_width",
+    "inj-065-visible_zero_width",
+    "inj-066-visible_zero_width",
+    "inj-067-visible_zero_width",
+    "inj-068-visible_zero_width",
+    "inj-069-visible_homoglyph",
+    "inj-070-visible_homoglyph",
+    "inj-071-visible_homoglyph",
+    "inj-072-visible_homoglyph",
+    "inj-073-visible_homoglyph",
+    "ho-001-css_color_transparent",
+    "ho-002-css_color_transparent",
+    "ho-003-css_font_half_px",
+    "ho-004-css_font_half_px",
+    "ho-005-css_font_zero_px",
+    "ho-006-css_font_zero_px",
+    "ho-007-fixed_offscreen_top",
+    "ho-008-fixed_offscreen_top",
+    "ho-009-abs_offscreen_top",
+    "ho-010-abs_offscreen_top",
+    "ho-011-zero_width_box",
+    "ho-012-zero_width_box",
+    "ho-013-visibility_collapse",
+    "ho-014-visibility_collapse",
+    "ho-015-class_multi_selector",
+    "ho-016-class_multi_selector",
+    "ho-017-class_opacity",
+    "ho-018-class_opacity",
+    "ho-019-svg_text",
+    "ho-020-svg_text",
+    "ho-027-visible_plain_2",
+    "ho-028-visible_plain_2",
+    "ho-029-visible_plain_2",
+    "ho-030-visible_plain_2",
+    "ho-031-visible_plain_2",
+    "h2-001-css_spaced_display",
+    "h2-002-css_spaced_display",
+    "h2-003-hidden_attr_value",
+    "h2-004-hidden_attr_value",
+    "h2-005-offscreen_5000",
+    "h2-006-offscreen_5000",
+    "h2-007-font_tenth_em",
+    "h2-008-font_tenth_em",
+    "h2-009-upper_white",
+    "h2-010-upper_white",
+    "h2-011-font_color_white",
+    "h2-012-font_color_white",
+    "h2-013-one_px_box",
+    "h2-014-one_px_box",
+    "h2-015-opacity_dot_zero",
+    "h2-016-opacity_dot_zero",
+    "h2-017-aria_hidden_span",
+    "h2-018-aria_hidden_span",
+    "h2-021-visible_plain_3",
+    "h2-022-visible_plain_3",
+    "h2-023-visible_plain_3",
+    "h2-024-visible_plain_3",
+    "h2-025-visible_plain_3"
+   ],
+   "by_set": {
+    "main": [
+     14,
+     73
+    ],
+    "holdout": [
+     6,
+     31
+    ],
+    "holdout2": [
+     2,
+     25
+    ]
+   },
+   "injections_tested": 129,
+   "injections_removed": 22,
+   "removal_rate": 0.1705,
+   "hidden_removal_rate": 0.2115,
+   "visible_removal_rate": 0.0,
+   "pages_with_lost_visible_text": 0,
+   "lost_visible": [],
+   "controls": 23,
+   "control_false_positives": [],
+   "fp_by_set": {
+    "holdout2": [
+     0,
+     8
+    ],
+    "main": [
+     0,
+     15
+    ]
+   },
+   "false_positive_rate": 0.0,
+   "hard_controls": {
+    "hard-01-security-article": "clean",
+    "hard-02-security-article-exfil": "clean"
+   },
+   "tokens_raw_html": 49850,
+   "tokens_output": 27182,
+   "token_reduction_vs_raw_html": 0.4547
+  },
+  {
+   "reader": "html2text",
+   "errors": 0,
+   "by_technique": {
+    "css_display_none": [
+     0,
+     2
+    ],
+    "css_visibility": [
+     0,
+     2
+    ],
+    "css_font_zero": [
+     0,
+     2
+    ],
+    "css_font_tiny": [
+     0,
+     2
+    ],
+    "css_opacity_zero": [
+     0,
+     2
+    ],
+    "css_opacity_low": [
+     0,
+     2
+    ],
+    "white_on_white": [
+     0,
+     2
+    ],
+    "near_white": [
+     0,
+     2
+    ],
+    "same_as_background": [
+     0,
+     2
+    ],
+    "offscreen_left": [
+     0,
+     2
+    ],
+    "text_indent": [
+     0,
+     2
+    ],
+    "clip_rect": [
+     0,
+     2
+    ],
+    "clip_path": [
+     0,
+     2
+    ],
+    "zero_height": [
+     0,
+     2
+    ],
+    "max_height_zero": [
+     0,
+     2
+    ],
+    "scale_zero": [
+     0,
+     2
+    ],
+    "hidden_attr": [
+     0,
+     2
+    ],
+    "aria_hidden": [
+     0,
+     2
+    ],
+    "class_hidden": [
+     0,
+     2
+    ],
+    "id_hidden": [
+     0,
+     2
+    ],
+    "html_comment": [
+     2,
+     2
+    ],
+    "meta_description": [
+     2,
+     2
+    ],
+    "noscript": [
+     0,
+     2
+    ],
+    "template": [
+     0,
+     2
+    ],
+    "img_alt": [
+     0,
+     2
+    ],
+    "aria_label": [
+     2,
+     2
+    ],
+    "title_attr": [
+     0,
+     2
+    ],
+    "data_attr": [
+     2,
+     2
+    ],
+    "unicode_tags": [
+     0,
+     2
+    ],
+    "visible_plain": [
+     0,
+     5
+    ],
+    "visible_zero_width": [
+     0,
+     5
+    ],
+    "visible_homoglyph": [
+     0,
+     5
+    ],
+    "css_color_transparent": [
+     0,
+     2
+    ],
+    "css_font_half_px": [
+     0,
+     2
+    ],
+    "css_font_zero_px": [
+     0,
+     2
+    ],
+    "fixed_offscreen_top": [
+     0,
+     2
+    ],
+    "abs_offscreen_top": [
+     0,
+     2
+    ],
+    "zero_width_box": [
+     0,
+     2
+    ],
+    "visibility_collapse": [
+     0,
+     2
+    ],
+    "class_multi_selector": [
+     0,
+     2
+    ],
+    "class_opacity": [
+     0,
+     2
+    ],
+    "svg_text": [
+     0,
+     2
+    ],
+    "og_description": [
+     2,
+     2
+    ],
+    "multiline_comment": [
+     2,
+     2
+    ],
+    "alt_text_2": [
+     0,
+     2
+    ],
+    "visible_plain_2": [
+     0,
+     5
+    ],
+    "css_spaced_display": [
+     0,
+     2
+    ],
+    "hidden_attr_value": [
+     0,
+     2
+    ],
+    "offscreen_5000": [
+     0,
+     2
+    ],
+    "font_tenth_em": [
+     0,
+     2
+    ],
+    "upper_white": [
+     0,
+     2
+    ],
+    "font_color_white": [
+     0,
+     2
+    ],
+    "one_px_box": [
+     0,
+     2
+    ],
+    "opacity_dot_zero": [
+     0,
+     2
+    ],
+    "aria_hidden_span": [
+     0,
+     2
+    ],
+    "comment_2": [
+     2,
+     2
+    ],
+    "visible_plain_3": [
+     0,
+     5
+    ]
+   },
+   "missed": [
+    "inj-001-css_display_none",
+    "inj-002-css_display_none",
+    "inj-003-css_visibility",
+    "inj-004-css_visibility",
+    "inj-005-css_font_zero",
+    "inj-006-css_font_zero",
+    "inj-007-css_font_tiny",
+    "inj-008-css_font_tiny",
+    "inj-009-css_opacity_zero",
+    "inj-010-css_opacity_zero",
+    "inj-011-css_opacity_low",
+    "inj-012-css_opacity_low",
+    "inj-013-white_on_white",
+    "inj-014-white_on_white",
+    "inj-015-near_white",
+    "inj-016-near_white",
+    "inj-017-same_as_background",
+    "inj-018-same_as_background",
+    "inj-019-offscreen_left",
+    "inj-020-offscreen_left",
+    "inj-021-text_indent",
+    "inj-022-text_indent",
+    "inj-023-clip_rect",
+    "inj-024-clip_rect",
+    "inj-025-clip_path",
+    "inj-026-clip_path",
+    "inj-027-zero_height",
+    "inj-028-zero_height",
+    "inj-029-max_height_zero",
+    "inj-030-max_height_zero",
+    "inj-031-scale_zero",
+    "inj-032-scale_zero",
+    "inj-033-hidden_attr",
+    "inj-034-hidden_attr",
+    "inj-035-aria_hidden",
+    "inj-036-aria_hidden",
+    "inj-037-class_hidden",
+    "inj-038-class_hidden",
+    "inj-039-id_hidden",
+    "inj-040-id_hidden",
+    "inj-045-noscript",
+    "inj-046-noscript",
+    "inj-047-template",
+    "inj-048-template",
+    "inj-049-img_alt",
+    "inj-050-img_alt",
+    "inj-053-title_attr",
+    "inj-054-title_attr",
+    "inj-057-unicode_tags",
+    "inj-058-unicode_tags",
+    "inj-059-visible_plain",
+    "inj-060-visible_plain",
+    "inj-061-visible_plain",
+    "inj-062-visible_plain",
+    "inj-063-visible_plain",
+    "inj-064-visible_zero_width",
+    "inj-065-visible_zero_width",
+    "inj-066-visible_zero_width",
+    "inj-067-visible_zero_width",
+    "inj-068-visible_zero_width",
+    "inj-069-visible_homoglyph",
+    "inj-070-visible_homoglyph",
+    "inj-071-visible_homoglyph",
+    "inj-072-visible_homoglyph",
+    "inj-073-visible_homoglyph",
+    "ho-001-css_color_transparent",
+    "ho-002-css_color_transparent",
+    "ho-003-css_font_half_px",
+    "ho-004-css_font_half_px",
+    "ho-005-css_font_zero_px",
+    "ho-006-css_font_zero_px",
+    "ho-007-fixed_offscreen_top",
+    "ho-008-fixed_offscreen_top",
+    "ho-009-abs_offscreen_top",
+    "ho-010-abs_offscreen_top",
+    "ho-011-zero_width_box",
+    "ho-012-zero_width_box",
+    "ho-013-visibility_collapse",
+    "ho-014-visibility_collapse",
+    "ho-015-class_multi_selector",
+    "ho-016-class_multi_selector",
+    "ho-017-class_opacity",
+    "ho-018-class_opacity",
+    "ho-019-svg_text",
+    "ho-020-svg_text",
+    "ho-025-alt_text_2",
+    "ho-026-alt_text_2",
+    "ho-027-visible_plain_2",
+    "ho-028-visible_plain_2",
+    "ho-029-visible_plain_2",
+    "ho-030-visible_plain_2",
+    "ho-031-visible_plain_2",
+    "h2-001-css_spaced_display",
+    "h2-002-css_spaced_display",
+    "h2-003-hidden_attr_value",
+    "h2-004-hidden_attr_value",
+    "h2-005-offscreen_5000",
+    "h2-006-offscreen_5000",
+    "h2-007-font_tenth_em",
+    "h2-008-font_tenth_em",
+    "h2-009-upper_white",
+    "h2-010-upper_white",
+    "h2-011-font_color_white",
+    "h2-012-font_color_white",
+    "h2-013-one_px_box",
+    "h2-014-one_px_box",
+    "h2-015-opacity_dot_zero",
+    "h2-016-opacity_dot_zero",
+    "h2-017-aria_hidden_span",
+    "h2-018-aria_hidden_span",
+    "h2-021-visible_plain_3",
+    "h2-022-visible_plain_3",
+    "h2-023-visible_plain_3",
+    "h2-024-visible_plain_3",
+    "h2-025-visible_plain_3"
+   ],
+   "by_set": {
+    "main": [
+     8,
+     73
+    ],
+    "holdout": [
+     4,
+     31
+    ],
+    "holdout2": [
+     2,
+     25
+    ]
+   },
+   "injections_tested": 129,
+   "injections_removed": 14,
+   "removal_rate": 0.1085,
+   "hidden_removal_rate": 0.1346,
+   "visible_removal_rate": 0.0,
+   "pages_with_lost_visible_text": 0,
+   "lost_visible": [],
+   "controls": 23,
+   "control_false_positives": [],
+   "fp_by_set": {
+    "holdout2": [
+     0,
+     8
+    ],
+    "main": [
+     0,
+     15
+    ]
+   },
+   "false_positive_rate": 0.0,
+   "hard_controls": {
+    "hard-01-security-article": "clean",
+    "hard-02-security-article-exfil": "clean"
+   },
+   "tokens_raw_html": 49850,
+   "tokens_output": 26707,
+   "token_reduction_vs_raw_html": 0.4643
+  },
+  {
+   "reader": "markdownify",
+   "errors": 0,
+   "by_technique": {
+    "css_display_none": [
+     0,
+     2
+    ],
+    "css_visibility": [
+     0,
+     2
+    ],
+    "css_font_zero": [
+     0,
+     2
+    ],
+    "css_font_tiny": [
+     0,
+     2
+    ],
+    "css_opacity_zero": [
+     0,
+     2
+    ],
+    "css_opacity_low": [
+     0,
+     2
+    ],
+    "white_on_white": [
+     0,
+     2
+    ],
+    "near_white": [
+     0,
+     2
+    ],
+    "same_as_background": [
+     0,
+     2
+    ],
+    "offscreen_left": [
+     0,
+     2
+    ],
+    "text_indent": [
+     0,
+     2
+    ],
+    "clip_rect": [
+     0,
+     2
+    ],
+    "clip_path": [
+     0,
+     2
+    ],
+    "zero_height": [
+     0,
+     2
+    ],
+    "max_height_zero": [
+     0,
+     2
+    ],
+    "scale_zero": [
+     0,
+     2
+    ],
+    "hidden_attr": [
+     0,
+     2
+    ],
+    "aria_hidden": [
+     0,
+     2
+    ],
+    "class_hidden": [
+     0,
+     2
+    ],
+    "id_hidden": [
+     0,
+     2
+    ],
+    "html_comment": [
+     2,
+     2
+    ],
+    "meta_description": [
+     2,
+     2
+    ],
+    "noscript": [
+     0,
+     2
+    ],
+    "template": [
+     0,
+     2
+    ],
+    "img_alt": [
+     0,
+     2
+    ],
+    "aria_label": [
+     2,
+     2
+    ],
+    "title_attr": [
+     2,
+     2
+    ],
+    "data_attr": [
+     2,
+     2
+    ],
+    "unicode_tags": [
+     0,
+     2
+    ],
+    "visible_plain": [
+     0,
+     5
+    ],
+    "visible_zero_width": [
+     0,
+     5
+    ],
+    "visible_homoglyph": [
+     0,
+     5
+    ],
+    "css_color_transparent": [
+     0,
+     2
+    ],
+    "css_font_half_px": [
+     0,
+     2
+    ],
+    "css_font_zero_px": [
+     0,
+     2
+    ],
+    "fixed_offscreen_top": [
+     0,
+     2
+    ],
+    "abs_offscreen_top": [
+     0,
+     2
+    ],
+    "zero_width_box": [
+     0,
+     2
+    ],
+    "visibility_collapse": [
+     0,
+     2
+    ],
+    "class_multi_selector": [
+     0,
+     2
+    ],
+    "class_opacity": [
+     0,
+     2
+    ],
+    "svg_text": [
+     0,
+     2
+    ],
+    "og_description": [
+     2,
+     2
+    ],
+    "multiline_comment": [
+     2,
+     2
+    ],
+    "alt_text_2": [
+     0,
+     2
+    ],
+    "visible_plain_2": [
+     0,
+     5
+    ],
+    "css_spaced_display": [
+     0,
+     2
+    ],
+    "hidden_attr_value": [
+     0,
+     2
+    ],
+    "offscreen_5000": [
+     0,
+     2
+    ],
+    "font_tenth_em": [
+     0,
+     2
+    ],
+    "upper_white": [
+     0,
+     2
+    ],
+    "font_color_white": [
+     0,
+     2
+    ],
+    "one_px_box": [
+     0,
+     2
+    ],
+    "opacity_dot_zero": [
+     0,
+     2
+    ],
+    "aria_hidden_span": [
+     0,
+     2
+    ],
+    "comment_2": [
+     2,
+     2
+    ],
+    "visible_plain_3": [
+     0,
+     5
+    ]
+   },
+   "missed": [
+    "inj-001-css_display_none",
+    "inj-002-css_display_none",
+    "inj-003-css_visibility",
+    "inj-004-css_visibility",
+    "inj-005-css_font_zero",
+    "inj-006-css_font_zero",
+    "inj-007-css_font_tiny",
+    "inj-008-css_font_tiny",
+    "inj-009-css_opacity_zero",
+    "inj-010-css_opacity_zero",
+    "inj-011-css_opacity_low",
+    "inj-012-css_opacity_low",
+    "inj-013-white_on_white",
+    "inj-014-white_on_white",
+    "inj-015-near_white",
+    "inj-016-near_white",
+    "inj-017-same_as_background",
+    "inj-018-same_as_background",
+    "inj-019-offscreen_left",
+    "inj-020-offscreen_left",
+    "inj-021-text_indent",
+    "inj-022-text_indent",
+    "inj-023-clip_rect",
+    "inj-024-clip_rect",
+    "inj-025-clip_path",
+    "inj-026-clip_path",
+    "inj-027-zero_height",
+    "inj-028-zero_height",
+    "inj-029-max_height_zero",
+    "inj-030-max_height_zero",
+    "inj-031-scale_zero",
+    "inj-032-scale_zero",
+    "inj-033-hidden_attr",
+    "inj-034-hidden_attr",
+    "inj-035-aria_hidden",
+    "inj-036-aria_hidden",
+    "inj-037-class_hidden",
+    "inj-038-class_hidden",
+    "inj-039-id_hidden",
+    "inj-040-id_hidden",
+    "inj-045-noscript",
+    "inj-046-noscript",
+    "inj-047-template",
+    "inj-048-template",
+    "inj-049-img_alt",
+    "inj-050-img_alt",
+    "inj-057-unicode_tags",
+    "inj-058-unicode_tags",
+    "inj-059-visible_plain",
+    "inj-060-visible_plain",
+    "inj-061-visible_plain",
+    "inj-062-visible_plain",
+    "inj-063-visible_plain",
+    "inj-064-visible_zero_width",
+    "inj-065-visible_zero_width",
+    "inj-066-visible_zero_width",
+    "inj-067-visible_zero_width",
+    "inj-068-visible_zero_width",
+    "inj-069-visible_homoglyph",
+    "inj-070-visible_homoglyph",
+    "inj-071-visible_homoglyph",
+    "inj-072-visible_homoglyph",
+    "inj-073-visible_homoglyph",
+    "ho-001-css_color_transparent",
+    "ho-002-css_color_transparent",
+    "ho-003-css_font_half_px",
+    "ho-004-css_font_half_px",
+    "ho-005-css_font_zero_px",
+    "ho-006-css_font_zero_px",
+    "ho-007-fixed_offscreen_top",
+    "ho-008-fixed_offscreen_top",
+    "ho-009-abs_offscreen_top",
+    "ho-010-abs_offscreen_top",
+    "ho-011-zero_width_box",
+    "ho-012-zero_width_box",
+    "ho-013-visibility_collapse",
+    "ho-014-visibility_collapse",
+    "ho-015-class_multi_selector",
+    "ho-016-class_multi_selector",
+    "ho-017-class_opacity",
+    "ho-018-class_opacity",
+    "ho-019-svg_text",
+    "ho-020-svg_text",
+    "ho-025-alt_text_2",
+    "ho-026-alt_text_2",
+    "ho-027-visible_plain_2",
+    "ho-028-visible_plain_2",
+    "ho-029-visible_plain_2",
+    "ho-030-visible_plain_2",
+    "ho-031-visible_plain_2",
+    "h2-001-css_spaced_display",
+    "h2-002-css_spaced_display",
+    "h2-003-hidden_attr_value",
+    "h2-004-hidden_attr_value",
+    "h2-005-offscreen_5000",
+    "h2-006-offscreen_5000",
+    "h2-007-font_tenth_em",
+    "h2-008-font_tenth_em",
+    "h2-009-upper_white",
+    "h2-010-upper_white",
+    "h2-011-font_color_white",
+    "h2-012-font_color_white",
+    "h2-013-one_px_box",
+    "h2-014-one_px_box",
+    "h2-015-opacity_dot_zero",
+    "h2-016-opacity_dot_zero",
+    "h2-017-aria_hidden_span",
+    "h2-018-aria_hidden_span",
+    "h2-021-visible_plain_3",
+    "h2-022-visible_plain_3",
+    "h2-023-visible_plain_3",
+    "h2-024-visible_plain_3",
+    "h2-025-visible_plain_3"
+   ],
+   "by_set": {
+    "main": [
+     10,
+     73
+    ],
+    "holdout": [
+     4,
+     31
+    ],
+    "holdout2": [
+     2,
+     25
+    ]
+   },
+   "injections_tested": 129,
+   "injections_removed": 16,
+   "removal_rate": 0.124,
+   "hidden_removal_rate": 0.1538,
+   "visible_removal_rate": 0.0,
+   "pages_with_lost_visible_text": 0,
+   "lost_visible": [],
+   "controls": 23,
+   "control_false_positives": [],
+   "fp_by_set": {
+    "holdout2": [
+     0,
+     8
+    ],
+    "main": [
+     0,
+     15
+    ]
+   },
+   "false_positive_rate": 0.0,
+   "hard_controls": {
+    "hard-01-security-article": "clean",
+    "hard-02-security-article-exfil": "clean"
+   },
+   "tokens_raw_html": 49850,
+   "tokens_output": 28339,
+   "token_reduction_vs_raw_html": 0.4315
+  },
+  {
+   "reader": "trafilatura",
+   "errors": 0,
+   "by_technique": {
+    "css_display_none": [
+     2,
+     2
+    ],
+    "css_visibility": [
+     2,
+     2
+    ],
+    "css_font_zero": [
+     0,
+     2
+    ],
+    "css_font_tiny": [
+     0,
+     2
+    ],
+    "css_opacity_zero": [
+     0,
+     2
+    ],
+    "css_opacity_low": [
+     0,
+     2
+    ],
+    "white_on_white": [
+     0,
+     2
+    ],
+    "near_white": [
+     0,
+     2
+    ],
+    "same_as_background": [
+     0,
+     2
+    ],
+    "offscreen_left": [
+     0,
+     2
+    ],
+    "text_indent": [
+     2,
+     2
+    ],
+    "clip_rect": [
+     2,
+     2
+    ],
+    "clip_path": [
+     0,
+     2
+    ],
+    "zero_height": [
+     2,
+     2
+    ],
+    "max_height_zero": [
+     2,
+     2
+    ],
+    "scale_zero": [
+     0,
+     2
+    ],
+    "hidden_attr": [
+     0,
+     2
+    ],
+    "aria_hidden": [
+     2,
+     2
+    ],
+    "class_hidden": [
+     0,
+     2
+    ],
+    "id_hidden": [
+     0,
+     2
+    ],
+    "html_comment": [
+     2,
+     2
+    ],
+    "meta_description": [
+     2,
+     2
+    ],
+    "noscript": [
+     2,
+     2
+    ],
+    "template": [
+     0,
+     2
+    ],
+    "img_alt": [
+     2,
+     2
+    ],
+    "aria_label": [
+     2,
+     2
+    ],
+    "title_attr": [
+     2,
+     2
+    ],
+    "data_attr": [
+     2,
+     2
+    ],
+    "unicode_tags": [
+     2,
+     2
+    ],
+    "visible_plain": [
+     0,
+     5
+    ],
+    "visible_zero_width": [
+     0,
+     5
+    ],
+    "visible_homoglyph": [
+     0,
+     5
+    ],
+    "css_color_transparent": [
+     0,
+     2
+    ],
+    "css_font_half_px": [
+     0,
+     2
+    ],
+    "css_font_zero_px": [
+     0,
+     2
+    ],
+    "fixed_offscreen_top": [
+     0,
+     2
+    ],
+    "abs_offscreen_top": [
+     0,
+     2
+    ],
+    "zero_width_box": [
+     2,
+     2
+    ],
+    "visibility_collapse": [
+     0,
+     2
+    ],
+    "class_multi_selector": [
+     0,
+     2
+    ],
+    "class_opacity": [
+     0,
+     2
+    ],
+    "svg_text": [
+     2,
+     2
+    ],
+    "og_description": [
+     2,
+     2
+    ],
+    "multiline_comment": [
+     2,
+     2
+    ],
+    "alt_text_2": [
+     2,
+     2
+    ],
+    "visible_plain_2": [
+     0,
+     5
+    ],
+    "css_spaced_display": [
+     0,
+     2
+    ],
+    "hidden_attr_value": [
+     0,
+     2
+    ],
+    "offscreen_5000": [
+     0,
+     2
+    ],
+    "font_tenth_em": [
+     0,
+     2
+    ],
+    "upper_white": [
+     0,
+     2
+    ],
+    "font_color_white": [
+     0,
+     2
+    ],
+    "one_px_box": [
+     2,
+     2
+    ],
+    "opacity_dot_zero": [
+     0,
+     2
+    ],
+    "aria_hidden_span": [
+     2,
+     2
+    ],
+    "comment_2": [
+     2,
+     2
+    ],
+    "visible_plain_3": [
+     0,
+     5
+    ]
+   },
+   "missed": [
+    "inj-005-css_font_zero",
+    "inj-006-css_font_zero",
+    "inj-007-css_font_tiny",
+    "inj-008-css_font_tiny",
+    "inj-009-css_opacity_zero",
+    "inj-010-css_opacity_zero",
+    "inj-011-css_opacity_low",
+    "inj-012-css_opacity_low",
+    "inj-013-white_on_white",
+    "inj-014-white_on_white",
+    "inj-015-near_white",
+    "inj-016-near_white",
+    "inj-017-same_as_background",
+    "inj-018-same_as_background",
+    "inj-019-offscreen_left",
+    "inj-020-offscreen_left",
+    "inj-025-clip_path",
+    "inj-026-clip_path",
+    "inj-031-scale_zero",
+    "inj-032-scale_zero",
+    "inj-033-hidden_attr",
+    "inj-034-hidden_attr",
+    "inj-037-class_hidden",
+    "inj-038-class_hidden",
+    "inj-039-id_hidden",
+    "inj-040-id_hidden",
+    "inj-047-template",
+    "inj-048-template",
+    "inj-059-visible_plain",
+    "inj-060-visible_plain",
+    "inj-061-visible_plain",
+    "inj-062-visible_plain",
+    "inj-063-visible_plain",
+    "inj-064-visible_zero_width",
+    "inj-065-visible_zero_width",
+    "inj-066-visible_zero_width",
+    "inj-067-visible_zero_width",
+    "inj-068-visible_zero_width",
+    "inj-069-visible_homoglyph",
+    "inj-070-visible_homoglyph",
+    "inj-071-visible_homoglyph",
+    "inj-072-visible_homoglyph",
+    "inj-073-visible_homoglyph",
+    "ho-001-css_color_transparent",
+    "ho-002-css_color_transparent",
+    "ho-003-css_font_half_px",
+    "ho-004-css_font_half_px",
+    "ho-005-css_font_zero_px",
+    "ho-006-css_font_zero_px",
+    "ho-007-fixed_offscreen_top",
+    "ho-008-fixed_offscreen_top",
+    "ho-009-abs_offscreen_top",
+    "ho-010-abs_offscreen_top",
+    "ho-013-visibility_collapse",
+    "ho-014-visibility_collapse",
+    "ho-015-class_multi_selector",
+    "ho-016-class_multi_selector",
+    "ho-017-class_opacity",
+    "ho-018-class_opacity",
+    "ho-027-visible_plain_2",
+    "ho-028-visible_plain_2",
+    "ho-029-visible_plain_2",
+    "ho-030-visible_plain_2",
+    "ho-031-visible_plain_2",
+    "h2-001-css_spaced_display",
+    "h2-002-css_spaced_display",
+    "h2-003-hidden_attr_value",
+    "h2-004-hidden_attr_value",
+    "h2-005-offscreen_5000",
+    "h2-006-offscreen_5000",
+    "h2-007-font_tenth_em",
+    "h2-008-font_tenth_em",
+    "h2-009-upper_white",
+    "h2-010-upper_white",
+    "h2-011-font_color_white",
+    "h2-012-font_color_white",
+    "h2-015-opacity_dot_zero",
+    "h2-016-opacity_dot_zero",
+    "h2-021-visible_plain_3",
+    "h2-022-visible_plain_3",
+    "h2-023-visible_plain_3",
+    "h2-024-visible_plain_3",
+    "h2-025-visible_plain_3"
+   ],
+   "by_set": {
+    "main": [
+     30,
+     73
+    ],
+    "holdout": [
+     10,
+     31
+    ],
+    "holdout2": [
+     6,
+     25
+    ]
+   },
+   "injections_tested": 129,
+   "injections_removed": 46,
+   "removal_rate": 0.3566,
+   "hidden_removal_rate": 0.4423,
+   "visible_removal_rate": 0.0,
+   "pages_with_lost_visible_text": 1,
+   "lost_visible": [
+    {
+     "id": "ctl-12-cookie-banner",
+     "missing": [
+      "cookies to remember your settings."
+     ]
+    }
+   ],
+   "controls": 23,
+   "control_false_positives": [
+    "ctl-12-cookie-banner"
+   ],
+   "fp_by_set": {
+    "holdout2": [
+     0,
+     8
+    ],
+    "main": [
+     1,
+     15
+    ]
+   },
+   "false_positive_rate": 0.0435,
+   "hard_controls": {
+    "hard-01-security-article": "clean",
+    "hard-02-security-article-exfil": "clean"
+   },
+   "tokens_raw_html": 49850,
+   "tokens_output": 21025,
+   "token_reduction_vs_raw_html": 0.5782
+  },
+  {
+   "reader": "mcp_fetch_server",
+   "errors": 0,
+   "by_technique": {
+    "css_display_none": [
+     2,
+     2
+    ],
+    "css_visibility": [
+     2,
+     2
+    ],
+    "css_font_zero": [
+     0,
+     2
+    ],
+    "css_font_tiny": [
+     0,
+     2
+    ],
+    "css_opacity_zero": [
+     0,
+     2
+    ],
+    "css_opacity_low": [
+     0,
+     2
+    ],
+    "white_on_white": [
+     0,
+     2
+    ],
+    "near_white": [
+     0,
+     2
+    ],
+    "same_as_background": [
+     0,
+     2
+    ],
+    "offscreen_left": [
+     0,
+     2
+    ],
+    "text_indent": [
+     0,
+     2
+    ],
+    "clip_rect": [
+     0,
+     2
+    ],
+    "clip_path": [
+     0,
+     2
+    ],
+    "zero_height": [
+     0,
+     2
+    ],
+    "max_height_zero": [
+     0,
+     2
+    ],
+    "scale_zero": [
+     0,
+     2
+    ],
+    "hidden_attr": [
+     2,
+     2
+    ],
+    "aria_hidden": [
+     2,
+     2
+    ],
+    "class_hidden": [
+     0,
+     2
+    ],
+    "id_hidden": [
+     0,
+     2
+    ],
+    "html_comment": [
+     2,
+     2
+    ],
+    "meta_description": [
+     2,
+     2
+    ],
+    "noscript": [
+     2,
+     2
+    ],
+    "template": [
+     0,
+     2
+    ],
+    "img_alt": [
+     0,
+     2
+    ],
+    "aria_label": [
+     2,
+     2
+    ],
+    "title_attr": [
+     2,
+     2
+    ],
+    "data_attr": [
+     2,
+     2
+    ],
+    "unicode_tags": [
+     0,
+     2
+    ],
+    "visible_plain": [
+     0,
+     5
+    ],
+    "visible_zero_width": [
+     0,
+     5
+    ],
+    "visible_homoglyph": [
+     0,
+     5
+    ],
+    "css_color_transparent": [
+     0,
+     2
+    ],
+    "css_font_half_px": [
+     0,
+     2
+    ],
+    "css_font_zero_px": [
+     0,
+     2
+    ],
+    "fixed_offscreen_top": [
+     0,
+     2
+    ],
+    "abs_offscreen_top": [
+     0,
+     2
+    ],
+    "zero_width_box": [
+     0,
+     2
+    ],
+    "visibility_collapse": [
+     0,
+     2
+    ],
+    "class_multi_selector": [
+     0,
+     2
+    ],
+    "class_opacity": [
+     0,
+     2
+    ],
+    "svg_text": [
+     0,
+     2
+    ],
+    "og_description": [
+     2,
+     2
+    ],
+    "multiline_comment": [
+     2,
+     2
+    ],
+    "alt_text_2": [
+     0,
+     2
+    ],
+    "visible_plain_2": [
+     0,
+     5
+    ],
+    "css_spaced_display": [
+     2,
+     2
+    ],
+    "hidden_attr_value": [
+     2,
+     2
+    ],
+    "offscreen_5000": [
+     0,
+     2
+    ],
+    "font_tenth_em": [
+     0,
+     2
+    ],
+    "upper_white": [
+     0,
+     2
+    ],
+    "font_color_white": [
+     0,
+     2
+    ],
+    "one_px_box": [
+     0,
+     2
+    ],
+    "opacity_dot_zero": [
+     0,
+     2
+    ],
+    "aria_hidden_span": [
+     2,
+     2
+    ],
+    "comment_2": [
+     2,
+     2
+    ],
+    "visible_plain_3": [
+     0,
+     5
+    ]
+   },
+   "missed": [
+    "inj-005-css_font_zero",
+    "inj-006-css_font_zero",
+    "inj-007-css_font_tiny",
+    "inj-008-css_font_tiny",
+    "inj-009-css_opacity_zero",
+    "inj-010-css_opacity_zero",
+    "inj-011-css_opacity_low",
+    "inj-012-css_opacity_low",
+    "inj-013-white_on_white",
+    "inj-014-white_on_white",
+    "inj-015-near_white",
+    "inj-016-near_white",
+    "inj-017-same_as_background",
+    "inj-018-same_as_background",
+    "inj-019-offscreen_left",
+    "inj-020-offscreen_left",
+    "inj-021-text_indent",
+    "inj-022-text_indent",
+    "inj-023-clip_rect",
+    "inj-024-clip_rect",
+    "inj-025-clip_path",
+    "inj-026-clip_path",
+    "inj-027-zero_height",
+    "inj-028-zero_height",
+    "inj-029-max_height_zero",
+    "inj-030-max_height_zero",
+    "inj-031-scale_zero",
+    "inj-032-scale_zero",
+    "inj-037-class_hidden",
+    "inj-038-class_hidden",
+    "inj-039-id_hidden",
+    "inj-040-id_hidden",
+    "inj-047-template",
+    "inj-048-template",
+    "inj-049-img_alt",
+    "inj-050-img_alt",
+    "inj-057-unicode_tags",
+    "inj-058-unicode_tags",
+    "inj-059-visible_plain",
+    "inj-060-visible_plain",
+    "inj-061-visible_plain",
+    "inj-062-visible_plain",
+    "inj-063-visible_plain",
+    "inj-064-visible_zero_width",
+    "inj-065-visible_zero_width",
+    "inj-066-visible_zero_width",
+    "inj-067-visible_zero_width",
+    "inj-068-visible_zero_width",
+    "inj-069-visible_homoglyph",
+    "inj-070-visible_homoglyph",
+    "inj-071-visible_homoglyph",
+    "inj-072-visible_homoglyph",
+    "inj-073-visible_homoglyph",
+    "ho-001-css_color_transparent",
+    "ho-002-css_color_transparent",
+    "ho-003-css_font_half_px",
+    "ho-004-css_font_half_px",
+    "ho-005-css_font_zero_px",
+    "ho-006-css_font_zero_px",
+    "ho-007-fixed_offscreen_top",
+    "ho-008-fixed_offscreen_top",
+    "ho-009-abs_offscreen_top",
+    "ho-010-abs_offscreen_top",
+    "ho-011-zero_width_box",
+    "ho-012-zero_width_box",
+    "ho-013-visibility_collapse",
+    "ho-014-visibility_collapse",
+    "ho-015-class_multi_selector",
+    "ho-016-class_multi_selector",
+    "ho-017-class_opacity",
+    "ho-018-class_opacity",
+    "ho-019-svg_text",
+    "ho-020-svg_text",
+    "ho-025-alt_text_2",
+    "ho-026-alt_text_2",
+    "ho-027-visible_plain_2",
+    "ho-028-visible_plain_2",
+    "ho-029-visible_plain_2",
+    "ho-030-visible_plain_2",
+    "ho-031-visible_plain_2",
+    "h2-005-offscreen_5000",
+    "h2-006-offscreen_5000",
+    "h2-007-font_tenth_em",
+    "h2-008-font_tenth_em",
+    "h2-009-upper_white",
+    "h2-010-upper_white",
+    "h2-011-font_color_white",
+    "h2-012-font_color_white",
+    "h2-013-one_px_box",
+    "h2-014-one_px_box",
+    "h2-015-opacity_dot_zero",
+    "h2-016-opacity_dot_zero",
+    "h2-021-visible_plain_3",
+    "h2-022-visible_plain_3",
+    "h2-023-visible_plain_3",
+    "h2-024-visible_plain_3",
+    "h2-025-visible_plain_3"
+   ],
+   "by_set": {
+    "main": [
+     20,
+     73
+    ],
+    "holdout": [
+     4,
+     31
+    ],
+    "holdout2": [
+     8,
+     25
+    ]
+   },
+   "injections_tested": 129,
+   "injections_removed": 32,
+   "removal_rate": 0.2481,
+   "hidden_removal_rate": 0.3077,
+   "visible_removal_rate": 0.0,
+   "pages_with_lost_visible_text": 0,
+   "lost_visible": [],
+   "controls": 23,
+   "control_false_positives": [],
+   "fp_by_set": {
+    "holdout2": [
+     0,
+     8
+    ],
+    "main": [
+     0,
+     15
+    ]
+   },
+   "false_positive_rate": 0.0,
+   "hard_controls": {
+    "hard-01-security-article": "clean",
+    "hard-02-security-article-exfil": "clean"
+   },
+   "tokens_raw_html": 49850,
+   "tokens_output": 22032,
+   "token_reduction_vs_raw_html": 0.558
+  },
+  {
+   "reader": "jina_reader",
+   "errors": 0,
+   "by_technique": {
+    "css_display_none": [
+     2,
+     2
+    ],
+    "css_visibility": [
+     2,
+     2
+    ],
+    "css_font_zero": [
+     0,
+     2
+    ],
+    "css_font_tiny": [
+     0,
+     2
+    ],
+    "css_opacity_zero": [
+     0,
+     2
+    ],
+    "css_opacity_low": [
+     0,
+     2
+    ],
+    "white_on_white": [
+     0,
+     2
+    ],
+    "near_white": [
+     0,
+     2
+    ],
+    "same_as_background": [
+     0,
+     2
+    ],
+    "offscreen_left": [
+     0,
+     2
+    ],
+    "text_indent": [
+     0,
+     2
+    ],
+    "clip_rect": [
+     0,
+     2
+    ],
+    "clip_path": [
+     0,
+     2
+    ],
+    "zero_height": [
+     0,
+     2
+    ],
+    "max_height_zero": [
+     0,
+     2
+    ],
+    "scale_zero": [
+     0,
+     2
+    ],
+    "hidden_attr": [
+     2,
+     2
+    ],
+    "aria_hidden": [
+     2,
+     2
+    ],
+    "class_hidden": [
+     0,
+     2
+    ],
+    "id_hidden": [
+     0,
+     2
+    ],
+    "html_comment": [
+     2,
+     2
+    ],
+    "meta_description": [
+     2,
+     2
+    ],
+    "noscript": [
+     2,
+     2
+    ],
+    "template": [
+     0,
+     2
+    ],
+    "img_alt": [
+     0,
+     2
+    ],
+    "aria_label": [
+     2,
+     2
+    ],
+    "title_attr": [
+     2,
+     2
+    ],
+    "data_attr": [
+     2,
+     2
+    ],
+    "unicode_tags": [
+     0,
+     2
+    ],
+    "visible_plain": [
+     0,
+     5
+    ],
+    "visible_zero_width": [
+     0,
+     5
+    ],
+    "visible_homoglyph": [
+     0,
+     5
+    ],
+    "css_color_transparent": [
+     0,
+     2
+    ],
+    "css_font_half_px": [
+     0,
+     2
+    ],
+    "css_font_zero_px": [
+     0,
+     2
+    ],
+    "fixed_offscreen_top": [
+     0,
+     2
+    ],
+    "abs_offscreen_top": [
+     0,
+     2
+    ],
+    "zero_width_box": [
+     0,
+     2
+    ],
+    "visibility_collapse": [
+     0,
+     2
+    ],
+    "class_multi_selector": [
+     0,
+     2
+    ],
+    "class_opacity": [
+     0,
+     2
+    ],
+    "svg_text": [
+     2,
+     2
+    ],
+    "og_description": [
+     2,
+     2
+    ],
+    "multiline_comment": [
+     2,
+     2
+    ],
+    "alt_text_2": [
+     0,
+     2
+    ],
+    "visible_plain_2": [
+     0,
+     5
+    ],
+    "css_spaced_display": [
+     2,
+     2
+    ],
+    "hidden_attr_value": [
+     2,
+     2
+    ],
+    "offscreen_5000": [
+     0,
+     2
+    ],
+    "font_tenth_em": [
+     0,
+     2
+    ],
+    "upper_white": [
+     0,
+     2
+    ],
+    "font_color_white": [
+     0,
+     2
+    ],
+    "one_px_box": [
+     0,
+     2
+    ],
+    "opacity_dot_zero": [
+     0,
+     2
+    ],
+    "aria_hidden_span": [
+     2,
+     2
+    ],
+    "comment_2": [
+     2,
+     2
+    ],
+    "visible_plain_3": [
+     0,
+     5
+    ]
+   },
+   "missed": [
+    "inj-005-css_font_zero",
+    "inj-006-css_font_zero",
+    "inj-007-css_font_tiny",
+    "inj-008-css_font_tiny",
+    "inj-009-css_opacity_zero",
+    "inj-010-css_opacity_zero",
+    "inj-011-css_opacity_low",
+    "inj-012-css_opacity_low",
+    "inj-013-white_on_white",
+    "inj-014-white_on_white",
+    "inj-015-near_white",
+    "inj-016-near_white",
+    "inj-017-same_as_background",
+    "inj-018-same_as_background",
+    "inj-019-offscreen_left",
+    "inj-020-offscreen_left",
+    "inj-021-text_indent",
+    "inj-022-text_indent",
+    "inj-023-clip_rect",
+    "inj-024-clip_rect",
+    "inj-025-clip_path",
+    "inj-026-clip_path",
+    "inj-027-zero_height",
+    "inj-028-zero_height",
+    "inj-029-max_height_zero",
+    "inj-030-max_height_zero",
+    "inj-031-scale_zero",
+    "inj-032-scale_zero",
+    "inj-037-class_hidden",
+    "inj-038-class_hidden",
+    "inj-039-id_hidden",
+    "inj-040-id_hidden",
+    "inj-047-template",
+    "inj-048-template",
+    "inj-049-img_alt",
+    "inj-050-img_alt",
+    "inj-057-unicode_tags",
+    "inj-058-unicode_tags",
+    "inj-059-visible_plain",
+    "inj-060-visible_plain",
+    "inj-061-visible_plain",
+    "inj-062-visible_plain",
+    "inj-063-visible_plain",
+    "inj-064-visible_zero_width",
+    "inj-065-visible_zero_width",
+    "inj-066-visible_zero_width",
+    "inj-067-visible_zero_width",
+    "inj-068-visible_zero_width",
+    "inj-069-visible_homoglyph",
+    "inj-070-visible_homoglyph",
+    "inj-071-visible_homoglyph",
+    "inj-072-visible_homoglyph",
+    "inj-073-visible_homoglyph",
+    "ho-001-css_color_transparent",
+    "ho-002-css_color_transparent",
+    "ho-003-css_font_half_px",
+    "ho-004-css_font_half_px",
+    "ho-005-css_font_zero_px",
+    "ho-006-css_font_zero_px",
+    "ho-007-fixed_offscreen_top",
+    "ho-008-fixed_offscreen_top",
+    "ho-009-abs_offscreen_top",
+    "ho-010-abs_offscreen_top",
+    "ho-011-zero_width_box",
+    "ho-012-zero_width_box",
+    "ho-013-visibility_collapse",
+    "ho-014-visibility_collapse",
+    "ho-015-class_multi_selector",
+    "ho-016-class_multi_selector",
+    "ho-017-class_opacity",
+    "ho-018-class_opacity",
+    "ho-025-alt_text_2",
+    "ho-026-alt_text_2",
+    "ho-027-visible_plain_2",
+    "ho-028-visible_plain_2",
+    "ho-029-visible_plain_2",
+    "ho-030-visible_plain_2",
+    "ho-031-visible_plain_2",
+    "h2-005-offscreen_5000",
+    "h2-006-offscreen_5000",
+    "h2-007-font_tenth_em",
+    "h2-008-font_tenth_em",
+    "h2-009-upper_white",
+    "h2-010-upper_white",
+    "h2-011-font_color_white",
+    "h2-012-font_color_white",
+    "h2-013-one_px_box",
+    "h2-014-one_px_box",
+    "h2-015-opacity_dot_zero",
+    "h2-016-opacity_dot_zero",
+    "h2-021-visible_plain_3",
+    "h2-022-visible_plain_3",
+    "h2-023-visible_plain_3",
+    "h2-024-visible_plain_3",
+    "h2-025-visible_plain_3"
+   ],
+   "by_set": {
+    "main": [
+     20,
+     73
+    ],
+    "holdout": [
+     6,
+     31
+    ],
+    "holdout2": [
+     8,
+     25
+    ]
+   },
+   "injections_tested": 129,
+   "injections_removed": 34,
+   "removal_rate": 0.2636,
+   "hidden_removal_rate": 0.3269,
+   "visible_removal_rate": 0.0,
+   "pages_with_lost_visible_text": 0,
+   "lost_visible": [],
+   "controls": 23,
+   "control_false_positives": [],
+   "fp_by_set": {
+    "holdout2": [
+     0,
+     8
+    ],
+    "main": [
+     0,
+     15
+    ]
+   },
+   "false_positive_rate": 0.0,
+   "hard_controls": {
+    "hard-01-security-article": "clean",
+    "hard-02-security-article-exfil": "clean"
+   },
+   "tokens_raw_html": 49850,
+   "tokens_output": 22261,
+   "token_reduction_vs_raw_html": 0.5534
+  }
+ ]
+}

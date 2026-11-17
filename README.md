@@ -11,7 +11,8 @@ MCP server + client snippets for GrindFree’s pay-per-call agent security APIs 
 | **MemoryGuard** | `POST https://memoryguard.grindfree.net/v1/screen` | $0.002 | Screen content before it is written to agent memory (planted instructions, persistence, secrets/PII) |
 | **WireShield** | `POST https://wireshield.grindfree.net/v1/scan` | $0.002 | Outbound leak check on agent output (zero-click image exfil, URL smuggling, canaries, prompt leakage) |
 | **DocShield** | `POST https://docshield.grindfree.net/v1/scan` | $0.004 | Hidden instructions in PDF / DOCX / XLSX / PPTX / HTML / Markdown before the agent reads them |
-| **SafeRead** | `POST https://saferead.grindfree.net/v1/read` | $0.002 | Fetch a URL as clean Markdown with hidden text and prompt injections removed or flagged (SSRF-guarded; HTML, text, JSON, PDF) |
+| **SafeRead** | `POST https://saferead.grindfree.net/v1/read` | $0.002 | Fetch a URL as clean Markdown with hidden text and prompt injections removed or flagged (SSRF-guarded; HTML, text, JSON, PDF). [Benchmark](benchmarks/hidden-injection/) |
+| SafeRead plain | `POST https://saferead.grindfree.net/v1/fetch` | $0.001 | Plain read: URL as clean Markdown, no injection screening |
 | **DocRead** | `POST https://docread.grindfree.net/v1/convert` (also `GET ?url=`) | $0.003 | Convert any document (PDF, DOCX, XLSX, PPTX, HTML, text; URL or upload) to clean Markdown for AI, with hidden text and prompt injections stripped and a removal report |
 | **AskHuman** | `POST https://askhuman.grindfree.net/v1/request` | $0.03 | Human-in-the-loop approval: one-tap approve/deny/edit link (ntfy, Slack, Discord, webhook); decision by poll, long-poll or signed callback; fails closed |
 | **TrifectaGate** | `POST https://trifectagate.grindfree.net/v1/check` | $0.002 | Session exfiltration gate: private data + untrusted content + outbound action → allow / review / block (sticky per-session taint, URL smuggling, secrets in payload) |
@@ -65,6 +66,7 @@ Claude Desktop / Cursor-style config:
 - `wireshield_scan` — check agent output before rendering/sending it
 - `docshield_scan` — check a local file (`path`), base64 bytes, or HTML/Markdown for hidden instructions (max 3 MB)
 - `saferead_read` — fetch a web page as clean Markdown with hidden text and prompt injections removed (honours robots.txt)
+- `saferead_fetch` — plain read: a web page as clean Markdown for $0.001, no injection screening (use `saferead_read` for untrusted pages)
 - `saferead_read_batch` — up to 10 web pages as clean Markdown in one call ($0.002 per URL, all-or-nothing)
 - `docread_convert` — convert PDF to Markdown (also DOCX/XLSX/PPTX/HTML; `url`, local `path`, base64 or inline content), injections stripped, with a removal report (max 3 MB)
 - `docread_tables` — extract tables from PDF/DOCX/XLSX/PPTX/HTML to typed JSON ($0.004)
