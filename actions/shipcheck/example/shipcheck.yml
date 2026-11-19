@@ -1,0 +1,17 @@
+# .github/workflows/shipcheck.yml
+name: ShipCheck
+on: [pull_request]
+permissions: { contents: read, security-events: write }
+jobs:
+  shipcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ronin93/grindfree-agent-security/actions/shipcheck@main
+        with:
+          x402-private-key: ${{ secrets.X402_PRIVATE_KEY }}
+          fail-on: block
+          sarif-file: shipcheck.sarif
+      - if: always() && hashFiles('shipcheck.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with: { sarif_file: shipcheck.sarif }

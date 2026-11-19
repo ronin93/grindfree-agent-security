@@ -1,7 +1,7 @@
 {
   "name": "@grindfree/agent-security-mcp",
-  "version": "0.7.0",
-  "description": "Agent-security MCP: PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard, WireShield, DocShield, SafeRead, DocRead, AskHuman, TrifectaGate over x402 (USDC on Base, caller's wallet; never GrindFree keys)",
+  "version": "0.8.0",
+  "description": "Agent-security MCP: PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard, WireShield, DocShield, SafeRead, DocRead, AskHuman, TrifectaGate, ShipCheck over x402 (USDC on Base, caller's wallet; never GrindFree keys)",
   "type": "module",
   "bin": {
     "grindfree-agent-security-mcp": "src/index.js"
@@ -49,7 +49,11 @@
     "egress",
     "docread",
     "pdf-to-markdown",
-    "document-parsing"
+    "document-parsing",
+    "shipcheck",
+    "saferead-watch",
+    "change-detection",
+    "ci-security"
   ],
   "license": "MIT",
   "dependencies": {

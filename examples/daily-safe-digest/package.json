@@ -1,0 +1,7 @@
+{
+  "name": "grindfree-daily-safe-digest",
+  "private": true,
+  "type": "module",
+  "scripts": { "digest": "node digest.mjs" },
+  "dependencies": { "@x402/evm": "^2.29.0", "@x402/fetch": "^2.29.0", "viem": "^2.57.16" }
+}

@@ -2,7 +2,7 @@
 /**
  * GrindFree agent-security MCP (stdio).
  * Exposes PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard,
- * WireShield, DocShield, SafeRead, DocRead, AskHuman and TrifectaGate. Paid calls use the CALLER's
+ * WireShield, DocShield, SafeRead (read, fetch, watch), DocRead, AskHuman, TrifectaGate and ShipCheck. Paid calls use the CALLER's
  * wallet via X402_PRIVATE_KEY / PRIVATE_KEY — never GrindFree keys.
  *
  * Unpaid discovery: tools still work for unpaid 402 probes when
@@ -28,6 +28,7 @@ const SR = "https://saferead.grindfree.net";
 const AH = "https://askhuman.grindfree.net";
 const TF = "https://trifectagate.grindfree.net";
 const DR = "https://docread.grindfree.net";
+const SC = "https://shipcheck.grindfree.net";
 const DOC_MAX_BYTES = 3 * 1024 * 1024;
 const policySchema = z.record(z.any()).optional().describe("Optional owner policy, e.g. {mode:'strict', allow_rules:[...]}");
 const reply = (r) => ({ content: [{ type: "text", text: JSON.stringify(r, null, 2) }], isError: !r.ok });
@@ -75,7 +76,7 @@ async function postJson(url, body, { paid } = { paid: true }) {
 
 const server = new McpServer({
   name: "grindfree-agent-security",
-  version: "0.7.0",
+  version: "0.8.0",
 });
 
 server.tool(
@@ -277,6 +278,41 @@ server.tool(
 );
 
 server.tool(
+  "saferead_watch",
+  "Check web pages for changes on a schedule (daily digest, monitor): each URL is read with hidden text and prompt injections removed, compared with the last check under the same watch_id, and returned as new | changed | unchanged with only the added sections. Page text is never stored (only section hashes, kept 90 days). All-or-nothing; failures are not charged. Paid x402 $0.002 USDC per URL on Base (5 URLs = $0.010).",
+  {
+    urls: z.array(z.string().url()).min(1).max(10).describe("1-10 http(s) URLs"),
+    watch_id: z.string().regex(/^[A-Za-z0-9_.:-]{6,128}$/).optional().describe("Stable id for this watch list, e.g. 'my-daily-digest' (default: your paying wallet)"),
+    return: z.enum(["changes", "full"]).optional().describe("changes (default) returns only added sections; full returns the whole cleaned page"),
+    format: z.enum(["markdown", "text"]).optional(),
+    max_chars: z.number().int().min(1000).max(50000).optional(),
+  },
+  async (a) => reply(await postJson(`${SR}/v1/watch`, clean(a)))
+);
+
+server.tool(
+  "shipcheck_scan",
+  "Scan an AI agent repo for security issues before merge or deploy: secrets, prompt injection and hidden Unicode in agent instruction files (AGENTS.md, CLAUDE.md, .cursorrules, SKILL.md), unpinned or poisoned MCP servers, inline MCP secrets, lethal-trifecta toolsets and risky CI/package/Docker commands. Returns pass/fail, findings with file and line, optional SARIF. Paid x402 $0.01 USDC on Base per run (up to 200 files, 1 MB).",
+  {
+    files: z.array(z.object({ path: z.string(), content: z.string() })).min(1).max(200).describe("Repo-relative path + text content"),
+    fail_on: z.enum(["block", "review"]).optional().describe("Fail on block findings (default) or review findings too"),
+    sarif: z.boolean().optional().describe("Also return SARIF 2.1.0 for GitHub code scanning"),
+  },
+  async (a) => reply(await postJson(`${SC}/v1/check`, clean(a)))
+);
+
+server.tool(
+  "grindfree_quote",
+  "Free price quote before you spend (no payment, no wallet needed): give planned GrindFree calls and an optional budget, get the exact USDC total, whether it fits, and how many runs the budget buys. Every 402 also carries X-Price-USD; only HTTP 2xx is charged.",
+  {
+    calls: z.array(z.object({ path: z.string().describe("Route path, e.g. /v1/watch"), count: z.number().int().min(1).max(100000).optional(), body: z.record(z.any()).optional().describe("Request body (for per-URL routes, include urls)") })).min(1).max(50),
+    budget_usd: z.number().positive().optional(),
+    origin: z.enum(["saferead", "shipcheck", "commandguard", "memoryguard", "wireshield", "docshield", "docread", "askhuman", "trifectagate"]).optional().describe("Which service to quote (default saferead)"),
+  },
+  async ({ origin, ...a }) => reply(await postJson(`https://${origin || "saferead"}.grindfree.net/quote`, clean(a), { paid: false }))
+);
+
+server.tool(
   "docread_convert",
   "Convert PDF to Markdown for AI, also DOCX, XLSX, PPTX, HTML, Markdown or text, from a URL, a local file path or inline content. Returns Markdown (headings, lists, tables) built from visible content only, a report of what was removed (hidden/white/tiny/invisible text, hidden sheets or slides, prompt-injection lines), flagged items and an allow|warn|block verdict. Feed only `markdown` to the model. include_findings=true adds DocShield's full scan of every channel. Max 3 MB. Paid x402 $0.003 USDC on Base; only successful conversions are charged.",
   {
@@ -442,6 +478,8 @@ server.tool(
       { name: "saferead_read", url: `${SR}/v1/read`, body: { url: "https://example.com/" } },
       { name: "saferead_read_batch", url: `${SR}/v1/read-batch`, body: { urls: ["https://example.com/", "https://example.org/"] } },
       { name: "saferead_fetch", url: `${SR}/v1/fetch`, body: { url: "https://example.com/" } },
+      { name: "saferead_watch", url: `${SR}/v1/watch`, body: { urls: ["https://example.com/"], watch_id: "probe-watch" } },
+      { name: "shipcheck_scan", url: `${SC}/v1/check`, body: { files: [{ path: "AGENTS.md", content: "# rules" }] } },
       { name: "docread_convert", url: `${DR}/v1/convert`, body: { content: "<p>hi</p>", filename: "probe.html" } },
       { name: "docread_tables", url: `${DR}/v1/tables`, body: { content: "<table><tr><th>a</th></tr><tr><td>1</td></tr></table>", filename: "probe.html" } },
       { name: "askhuman_request", url: `${AH}/v1/request`, body: { action: { title: "probe" }, notify: { link_only: true } } },
@@ -469,11 +507,12 @@ server.tool(
     }
     const text = JSON.stringify(
       {
-        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR, docread: DR, askhuman: AH, trifectagate: TF },
+        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR, docread: DR, askhuman: AH, trifectagate: TF, shipcheck: SC },
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", saferead_fetch_plain: "0.001", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", saferead_fetch_plain: "0.001", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002", saferead_watch_per_url: "0.002", shipcheck: "0.01" },
+          pricing: "https://saferead.grindfree.net/pricing.json", quote: "https://saferead.grindfree.net/quote",
           network: "eip155:8453",
         },
         unpaid_probes: probes,

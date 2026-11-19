@@ -1,0 +1,3 @@
+# One URL per line. Up to 10 per paid call; more are split into several calls.
+https://example.com/
+https://www.iana.org/help/example-domains

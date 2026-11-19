@@ -1,0 +1,40 @@
+name: "GrindFree ShipCheck"
+description: "Agent-security check for PRs: secrets, prompt injection in agent instructions, unpinned/poisoned MCP servers, risky CI commands. $0.01 USDC per run via x402."
+author: "GrindFree"
+branding: { icon: "shield", color: "green" }
+inputs:
+  x402-private-key:
+    description: "Private key of a Base wallet holding a little USDC (pays $0.01 per run). Use a dedicated low-balance wallet, stored as a secret."
+    required: true
+  fail-on:
+    description: "block (default) or review"
+    default: "block"
+  scope:
+    description: "changed (files changed in the PR plus agent config files, default) or all (every agent-relevant file in the repo)"
+    default: "changed"
+  sarif-file:
+    description: "Write SARIF 2.1.0 here (upload it with github/codeql-action/upload-sarif). Empty = no SARIF."
+    default: ""
+  max-usd:
+    description: "Refuse to pay if the quoted price is above this"
+    default: "0.01"
+outputs:
+  decision: { description: "pass or fail", value: "${{ steps.scan.outputs.decision }}" }
+  findings: { description: "number of findings", value: "${{ steps.scan.outputs.findings }}" }
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with: { node-version: 20 }
+    - shell: bash
+      run: cd "$GITHUB_ACTION_PATH" && npm install --no-audit --no-fund --silent
+    - id: scan
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/scan.mjs"
+      env:
+        X402_PRIVATE_KEY: ${{ inputs.x402-private-key }}
+        SC_FAIL_ON: ${{ inputs.fail-on }}
+        SC_SCOPE: ${{ inputs.scope }}
+        SC_SARIF: ${{ inputs.sarif-file }}
+        SC_MAX_USD: ${{ inputs.max-usd }}
+        SC_BASE: ${{ github.event.pull_request.base.sha }}

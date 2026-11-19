@@ -1,0 +1,20 @@
+# Copy to .github/workflows/daily-safe-digest.yml in your repo, with examples/daily-safe-digest/ beside it.
+# Secret needed: X402_PRIVATE_KEY (a Base wallet holding a little USDC; never your main wallet).
+name: Daily safe digest
+on:
+  schedule: [{ cron: "0 12 * * *" }] # every day 12:00 UTC
+  workflow_dispatch: {}
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: examples/daily-safe-digest } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm install --no-audit --no-fund
+      - run: node digest.mjs >> "$GITHUB_STEP_SUMMARY"
+        env:
+          X402_PRIVATE_KEY: ${{ secrets.X402_PRIVATE_KEY }}
+          WATCH_ID: ${{ github.repository_id }}-digest
+          MAX_USD: "0.05"

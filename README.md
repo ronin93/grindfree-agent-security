@@ -13,12 +13,26 @@ MCP server + client snippets for GrindFree’s pay-per-call agent security APIs 
 | **DocShield** | `POST https://docshield.grindfree.net/v1/scan` | $0.004 | Hidden instructions in PDF / DOCX / XLSX / PPTX / HTML / Markdown before the agent reads them |
 | **SafeRead** | `POST https://saferead.grindfree.net/v1/read` | $0.002 | Fetch a URL as clean Markdown with hidden text and prompt injections removed or flagged (SSRF-guarded; HTML, text, JSON, PDF). [Benchmark](benchmarks/hidden-injection/) |
 | SafeRead plain | `POST https://saferead.grindfree.net/v1/fetch` | $0.001 | Plain read: URL as clean Markdown, no injection screening |
+| SafeRead Watch | `POST https://saferead.grindfree.net/v1/watch` | $0.002 / URL | Daily change detection: each page read safely and returned as new / changed / unchanged with only the added sections. Page text never stored. [Daily safe digest recipe](examples/daily-safe-digest/) |
 | **DocRead** | `POST https://docread.grindfree.net/v1/convert` (also `GET ?url=`) | $0.003 | Convert any document (PDF, DOCX, XLSX, PPTX, HTML, text; URL or upload) to clean Markdown for AI, with hidden text and prompt injections stripped and a removal report |
 | **AskHuman** | `POST https://askhuman.grindfree.net/v1/request` | $0.03 | Human-in-the-loop approval: one-tap approve/deny/edit link (ntfy, Slack, Discord, webhook); decision by poll, long-poll or signed callback; fails closed |
+| **ShipCheck** | `POST https://shipcheck.grindfree.net/v1/check` | $0.01 / run | One CI call for an agent repo: secrets, prompt injection in agent instructions, unpinned/poisoned MCP servers, risky commands; SARIF. [GitHub Action](actions/shipcheck/) |
 | **TrifectaGate** | `POST https://trifectagate.grindfree.net/v1/check` | $0.002 | Session exfiltration gate: private data + untrusted content + outbound action → allow / review / block (sticky per-session taint, URL smuggling, secrets in payload) |
 
 **Price:** per call in USDC (table above) on **Base** (`eip155:8453`) via [x402](https://x402.org) v2.  
 **Wallet:** the **caller’s** Base USDC wallet pays. This repo never ships GrindFree keys.
+
+### Spending a budget on GrindFree
+
+- **Know the price before paying:** every service has a free `/pricing.json` and a free `/quote` (`POST {"calls":[{"path":"/v1/watch","count":30,"body":{"urls":[...]}}],"budget_usd":1}` → exact total, whether it fits, runs affordable). Every 402 carries `X-Price-USD` and `X-Max-Charge-USD`; paid 200s carry `X-Charged-USD`.
+- **Only success is charged:** 4xx/5xx responses are never settled. All prices are fixed per call or per URL, far below the common $1-per-payment client cap.
+- **What $1 buys:** 500 safe page reads, 1,000 plain fetches, 500 watched pages, 100 ShipCheck CI runs, 1,000 shell-command checks, 250 document scans, 33 human approvals.
+- **Proof:** all 16 previously listed GrindFree routes are graded A by [SettleWatch](https://settlewatch.com) (independent settlement and uptime monitor, Nov 19 2026); SafeRead removed 129/129 hidden injections with 0/23 false positives in the [open benchmark](benchmarks/hidden-injection/).
+
+### Recipes
+
+- [Daily safe digest](examples/daily-safe-digest/) — watch 10 pages a day for ~$0.60/month; only changes, injections removed.
+- [ShipCheck on every PR](actions/shipcheck/) — $0.01 per pull request; annotations + SARIF.
 
 Contact: [rob@grindfree.net](mailto:rob@grindfree.net) · [@grindfreelabs](https://x.com/grindfreelabs)
 
@@ -68,6 +82,9 @@ Claude Desktop / Cursor-style config:
 - `saferead_read` — fetch a web page as clean Markdown with hidden text and prompt injections removed (honours robots.txt)
 - `saferead_fetch` — plain read: a web page as clean Markdown for $0.001, no injection screening (use `saferead_read` for untrusted pages)
 - `saferead_read_batch` — up to 10 web pages as clean Markdown in one call ($0.002 per URL, all-or-nothing)
+- `saferead_watch` — check pages for changes on a schedule ($0.002 per URL): new / changed / unchanged, only added sections, injections removed
+- `shipcheck_scan` — agent-repo security check for CI ($0.01 per run): secrets, instruction-file injection, MCP config risks, risky commands; SARIF
+- `grindfree_quote` — free price quote and budget fit for planned calls (no wallet needed)
 - `docread_convert` — convert PDF to Markdown (also DOCX/XLSX/PPTX/HTML; `url`, local `path`, base64 or inline content), injections stripped, with a removal report (max 3 MB)
 - `docread_tables` — extract tables from PDF/DOCX/XLSX/PPTX/HTML to typed JSON ($0.004)
 - `trifectagate_check` / `askhuman_request` / `askhuman_status` — exfiltration gate and human approval

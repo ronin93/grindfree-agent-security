@@ -47,8 +47,21 @@ Claude Desktop / Cursor MCP config example:
 | `docread_tables` | POST https://docread.grindfree.net/v1/tables | tables in PDF/DOCX/XLSX/PPTX/HTML → typed JSON (columns, column types, rows); injected cells replaced · $0.004 |
 | `askhuman_request` | POST https://askhuman.grindfree.net/v1/request | ask the human owner to approve/deny/edit one action (ntfy, Slack, Discord, webhook or link) · $0.03 |
 | `askhuman_status` | GET https://askhuman.grindfree.net/status/{id} | decision for a request; long-poll with wait · free |
+| `saferead_watch` | POST https://saferead.grindfree.net/v1/watch | daily change detection: pages read safely, returned as new / changed / unchanged with only added sections; page text never stored · $0.002/URL |
+| `shipcheck_scan` | POST https://shipcheck.grindfree.net/v1/check | agent-repo security check for CI: secrets, instruction-file injection, MCP config risks, risky commands, SARIF · $0.01/run |
+| `grindfree_quote` | POST https://<service>.grindfree.net/quote | free: exact price and budget fit for planned calls · $0 |
 | `trifectagate_check` | POST https://trifectagate.grindfree.net/v1/check | session exfiltration gate before any outbound action: allow/review/block · $0.002 |
 | `grindfree_discovery` | (local unpaid probes) | well-known / 402 challenge summary |
+
+## Daily safe digest recipe
+
+Ask your agent (with this MCP) once a day: *"Call saferead_watch with watch_id 'news-digest' on these 10 URLs and summarize only the changes."*
+That is $0.02/day ($0.60/month); unchanged pages return no text, new hidden or injected blocks are removed and counted.
+A cron / GitHub Actions version without MCP: https://github.com/ronin93/grindfree-agent-security/tree/main/examples/daily-safe-digest
+
+## Budgets
+
+`grindfree_quote` (free) returns the exact USDC cost of planned calls and how many runs a budget buys. Every 402 carries `X-Price-USD`; only HTTP 2xx is charged.
 
 ## Honesty
 
