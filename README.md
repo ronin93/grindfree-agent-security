@@ -27,7 +27,7 @@ MCP server + client snippets for GrindFree’s pay-per-call agent security APIs 
 - **Know the price before paying:** every service has a free `/pricing.json` and a free `/quote` (`POST {"calls":[{"path":"/v1/watch","count":30,"body":{"urls":[...]}}],"budget_usd":1}` → exact total, whether it fits, runs affordable). Every 402 carries `X-Price-USD` and `X-Max-Charge-USD`; paid 200s carry `X-Charged-USD`.
 - **Only success is charged:** 4xx/5xx responses are never settled. All prices are fixed per call or per URL, far below the common $1-per-payment client cap.
 - **What $1 buys:** 500 safe page reads, 1,000 plain fetches, 500 watched pages, 100 ShipCheck CI runs, 1,000 shell-command checks, 250 document scans, 33 human approvals.
-- **Proof:** all 16 previously listed GrindFree routes are graded A by [SettleWatch](https://settlewatch.com) (independent settlement and uptime monitor, Nov 19 2026); SafeRead removed 129/129 hidden injections with 0/23 false positives in the [open benchmark](benchmarks/hidden-injection/).
+- **Proof:** all 16 previously listed GrindFree routes are graded A by [SettleWatch](https://settlewatch.com) (independent settlement and uptime monitor, Nov 19 2026); SafeRead removed 129/129 hidden injections with 0/23 false positives in the [open benchmark](benchmarks/hidden-injection/) (rules were tuned on that corpus; 65% and 72% on untuned hold-out sets).
 
 ### Recipes
 
