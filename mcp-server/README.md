@@ -1,13 +1,16 @@
 # @grindfree/agent-security-mcp
 
-stdio MCP server for **PromptShield**, **CrawlSafe**, **ToolGuard**, **CommandGuard**, **MemoryGuard**, **WireShield**, **DocShield**, **SafeRead**, **DocRead**, **AskHuman** and **TrifectaGate**.
+stdio MCP server for **PromptShield**, **CrawlSafe**, **ToolGuard**, **CommandGuard**, **MemoryGuard**, **WireShield**, **DocShield**, **SafeRead**, **DocRead**, **AskHuman**, **TrifectaGate** and **ShipCheck** (21 tools).
 
-Paid tool calls settle x402 (USDC on Base, $0.001–$0.004 per call) using **the caller's** wallet via `X402_PRIVATE_KEY` or `PRIVATE_KEY`. GrindFree keys are never used or accepted.
+**Version 0.8.0** — on npm (`@grindfree/agent-security-mcp`) and the MCP Registry (`io.github.ronin93/grindfree-agent-security`).
+
+Paid tool calls settle x402 (USDC on Base, $0.001–$0.03 per call) using **the caller's** wallet via `X402_PRIVATE_KEY` or `PRIVATE_KEY`. GrindFree keys are never used or accepted.
 
 ## Run (npx / local)
 
 ```bash
-# from this package directory after npm install
+X402_PRIVATE_KEY=0xYOUR_BASE_USDC_KEY npx -y @grindfree/agent-security-mcp
+# or, from this package directory after npm install
 X402_PRIVATE_KEY=0xYOUR_BASE_USDC_KEY npx grindfree-agent-security-mcp
 # or
 node src/index.js
@@ -19,8 +22,8 @@ Claude Desktop / Cursor MCP config example:
 {
   "mcpServers": {
     "grindfree-agent-security": {
-      "command": "node",
-      "args": ["/absolute/path/to/grindfree-integrations/mcp-server/src/index.js"],
+      "command": "npx",
+      "args": ["-y", "@grindfree/agent-security-mcp"],
       "env": { "X402_PRIVATE_KEY": "0xYOUR_KEY" }
     }
   }

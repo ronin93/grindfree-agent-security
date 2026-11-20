@@ -40,6 +40,14 @@ Contact: [rob@grindfree.net](mailto:rob@grindfree.net) · [@grindfreelabs](https
 
 ## Install / run the MCP server (stdio)
 
+**MCP 0.8.0 (21 tools)** is on npm and the MCP Registry (`io.github.ronin93/grindfree-agent-security`):
+
+```bash
+X402_PRIVATE_KEY=0xYOUR_BASE_USDC_PRIVATE_KEY npx -y @grindfree/agent-security-mcp
+```
+
+From source:
+
 ```bash
 git clone https://github.com/ronin93/grindfree-agent-security.git
 cd grindfree-agent-security/mcp-server
@@ -60,8 +68,8 @@ Claude Desktop / Cursor-style config:
 {
   "mcpServers": {
     "grindfree-agent-security": {
-      "command": "node",
-      "args": ["/absolute/path/to/grindfree-agent-security/mcp-server/src/index.js"],
+      "command": "npx",
+      "args": ["-y", "@grindfree/agent-security-mcp"],
       "env": {
         "X402_PRIVATE_KEY": "0xYOUR_KEY"
       }
