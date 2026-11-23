@@ -1,8 +1,8 @@
 # @grindfree/agent-security-mcp
 
-stdio MCP server for **PromptShield**, **CrawlSafe**, **ToolGuard**, **CommandGuard**, **MemoryGuard**, **WireShield**, **DocShield**, **SafeRead**, **DocRead**, **AskHuman**, **TrifectaGate** and **ShipCheck** (22 tools).
+stdio MCP server for **PromptShield**, **CrawlSafe**, **ToolGuard**, **CommandGuard**, **MemoryGuard**, **WireShield**, **DocShield**, **SafeRead**, **DocRead**, **AskHuman**, **TrifectaGate** and **ShipCheck** (23 tools).
 
-**Version 0.9.0** — on npm (`@grindfree/agent-security-mcp`) and the MCP Registry (`io.github.ronin93/grindfree-agent-security`).
+**Version 0.10.0** — on npm (`@grindfree/agent-security-mcp`) and the MCP Registry (`io.github.ronin93/grindfree-agent-security`).
 
 Paid tool calls settle x402 (USDC on Base, $0.001–$0.03 per call) using **the caller's** wallet via `X402_PRIVATE_KEY` or `PRIVATE_KEY`. GrindFree keys are never used or accepted.
 
@@ -50,6 +50,7 @@ Claude Desktop / Cursor MCP config example:
 | `docread_tables` | POST https://docread.grindfree.net/v1/tables | tables in PDF/DOCX/XLSX/PPTX/HTML → typed JSON (columns, column types, rows); injected cells replaced · $0.004 |
 | `askhuman_request` | POST https://askhuman.grindfree.net/v1/request | ask the human owner to approve/deny/edit one action (ntfy, Slack, Discord, webhook or link) · $0.03 |
 | `askhuman_status` | GET https://askhuman.grindfree.net/status/{id} | decision for a request; long-poll with wait · free |
+| `commandguard_check_and_approve` | POST https://commandguard.grindfree.net/v1/check-and-approve | optional add-on: CommandGuard check plus a one-tap human approve/deny link (via AskHuman) when the command or SQL is warned or blocked · $0.03 |
 | `saferead_search` | POST https://saferead.grindfree.net/v1/search | web search without prompt injection: ranked sources plus the top 3 pages read as clean Markdown, per-page injection flag; search results by You.com · $0.02/search |
 | `saferead_watch` | POST https://saferead.grindfree.net/v1/watch | daily change detection: pages read safely, returned as new / changed / unchanged with only added sections; page text never stored · $0.002/URL |
 | `shipcheck_scan` | POST https://shipcheck.grindfree.net/v1/check | agent-repo security check for CI: secrets, instruction-file injection, MCP config risks, risky commands, SARIF · $0.01/run |

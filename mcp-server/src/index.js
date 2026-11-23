@@ -182,6 +182,23 @@ server.tool(
 );
 
 server.tool(
+  "commandguard_check_and_approve",
+  "Optional add-on to commandguard_command / commandguard_sql, for when a human should decide instead of the agent just stopping: checks one shell command or SQL statement and, if it is warned or blocked, sends the owner a one-tap approve/deny link (ntfy, Slack, Discord, webhook or link only) via AskHuman. Returns the check plus approval_url, poll_url and wait_url; execute only when status is approved (no answer = deny). Paid x402 $0.03 USDC on Base per call, including when no approval is needed; for the check alone use commandguard_command ($0.001).",
+  {
+    command: z.string().max(6000).optional().describe("Shell command to check (send command or sql)"),
+    sql: z.string().max(6000).optional().describe("SQL to check (send command or sql)"),
+    notify: z.object({ ntfy_topic: z.string().optional(), webhook_url: z.string().optional(), slack_webhook_url: z.string().optional(), discord_webhook_url: z.string().optional(), link_only: z.boolean().optional() }).describe("Exactly one channel"),
+    ask_on: z.array(z.enum(["block", "warn", "allow"])).optional().describe("Verdicts that trigger a human request (default block, warn)"),
+    timeout_seconds: z.number().int().min(60).max(86400).optional(),
+    on_timeout: z.enum(["deny", "expire"]).optional(),
+    callback_url: z.string().optional(),
+    title: z.string().max(80).optional(),
+    policy: policySchema,
+  },
+  async (a) => reply(await postJson(`${CG}/v1/check-and-approve`, clean(a)))
+);
+
+server.tool(
   "memoryguard_screen",
   "Screen content BEFORE writing it to an agent's long-term memory: planted instructions, persistence/trigger attacks ('from now on…', 'whenever the user asks…'), exfil setups, secrets and PII. Source-aware (user vs tool/web/email). Returns allow|review|block plus a sanitized copy. Paid x402 $0.002 USDC on Base.",
   {
@@ -487,6 +504,7 @@ server.tool(
       },
       { name: "commandguard_command", url: `${CG}/v1/command`, body: { command: "ls -la" } },
       { name: "commandguard_sql", url: `${CG}/v1/sql`, body: { sql: "SELECT 1" } },
+      { name: "commandguard_check_and_approve", url: `${CG}/v1/check-and-approve`, body: { command: "ls -la", notify: { link_only: true } } },
       { name: "memoryguard_screen", url: `${MG}/v1/screen`, body: { content: "User prefers metric units.", source: "user" } },
       { name: "wireshield_scan", url: `${WS}/v1/scan`, body: { content: "hello", format: "text" } },
       { name: "docshield_scan", url: `${DS}/v1/scan`, body: { content: "<p>hi</p>", format: "html" } },
@@ -527,7 +545,7 @@ server.tool(
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", saferead_fetch_plain: "0.001", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002", saferead_watch_per_url: "0.002", saferead_search: "0.02", shipcheck: "0.01" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", commandguard_check_and_approve: "0.03", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", saferead_fetch_plain: "0.001", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002", saferead_watch_per_url: "0.002", saferead_search: "0.02", shipcheck: "0.01" },
           pricing: "https://saferead.grindfree.net/pricing.json", quote: "https://saferead.grindfree.net/quote",
           network: "eip155:8453",
         },
