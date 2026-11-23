@@ -41,7 +41,7 @@ Contact: [rob@grindfree.net](mailto:rob@grindfree.net) · [@grindfreelabs](https
 
 ## Install / run the MCP server (stdio)
 
-**MCP 0.8.0 (21 tools)** is on npm and the MCP Registry (`io.github.ronin93/grindfree-agent-security`):
+**MCP 0.9.0 (22 tools)** is on npm and the MCP Registry (`io.github.ronin93/grindfree-agent-security`):
 
 ```bash
 X402_PRIVATE_KEY=0xYOUR_BASE_USDC_PRIVATE_KEY npx -y @grindfree/agent-security-mcp
@@ -91,6 +91,7 @@ Claude Desktop / Cursor-style config:
 - `saferead_read` — fetch a web page as clean Markdown with hidden text and prompt injections removed (honours robots.txt)
 - `saferead_fetch` — plain read: a web page as clean Markdown for $0.001, no injection screening (use `saferead_read` for untrusted pages)
 - `saferead_read_batch` — up to 10 web pages as clean Markdown in one call ($0.002 per URL, all-or-nothing)
+- `saferead_search` — search the web without prompt injection ($0.02 per search): ranked sources plus the top 3 pages as clean Markdown, per-page injection flag (search results by You.com)
 - `saferead_watch` — check pages for changes on a schedule ($0.002 per URL): new / changed / unchanged, only added sections, injections removed
 - `shipcheck_scan` — agent-repo security check for CI ($0.01 per run): secrets, instruction-file injection, MCP config risks, risky commands; SARIF
 - `grindfree_quote` — free price quote and budget fit for planned calls (no wallet needed)

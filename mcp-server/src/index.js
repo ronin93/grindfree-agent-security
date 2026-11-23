@@ -2,7 +2,7 @@
 /**
  * GrindFree agent-security MCP (stdio).
  * Exposes PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard,
- * WireShield, DocShield, SafeRead (read, fetch, watch), DocRead, AskHuman, TrifectaGate and ShipCheck. Paid calls use the CALLER's
+ * WireShield, DocShield, SafeRead (read, fetch, watch, search), DocRead, AskHuman, TrifectaGate and ShipCheck. Paid calls use the CALLER's
  * wallet via X402_PRIVATE_KEY / PRIVATE_KEY — never GrindFree keys.
  *
  * Unpaid discovery: tools still work for unpaid 402 probes when
@@ -291,6 +291,21 @@ server.tool(
 );
 
 server.tool(
+  "saferead_search",
+  "Search the web without prompt injection: one call runs a web search, then reads the top results (default 3) as clean Markdown with hidden text and prompt injections removed. Returns ranked sources (title, URL), each page's clean text and a per-page injection flag. Search results by You.com. Paid x402 $0.02 USDC on Base per search, flat; failures (no results, nothing readable) are not charged.",
+  {
+    query: z.string().min(2).max(400).describe("What to search for"),
+    max_results: z.number().int().min(1).max(10).optional().describe("Ranked sources to return (default 5)"),
+    read_top: z.number().int().min(1).max(3).optional().describe("How many top results to read and clean (default 3)"),
+    max_chars: z.number().int().min(1000).max(20000).optional().describe("Max characters of clean text per page (default 8000)"),
+    freshness: z.enum(["day", "week", "month", "year"]).optional(),
+    country: z.string().regex(/^[A-Za-z]{2}$/).optional().describe("2-letter country code"),
+    format: z.enum(["markdown", "text"]).optional(),
+  },
+  async (a) => reply(await postJson(`${SR}/v1/search`, clean(a)))
+);
+
+server.tool(
   "shipcheck_scan",
   "Scan an AI agent repo for security issues before merge or deploy: secrets, prompt injection and hidden Unicode in agent instruction files (AGENTS.md, CLAUDE.md, .cursorrules, SKILL.md), unpinned or poisoned MCP servers, inline MCP secrets, lethal-trifecta toolsets and risky CI/package/Docker commands. Returns pass/fail, findings with file and line, optional SARIF. Paid x402 $0.01 USDC on Base per run (up to 200 files, 1 MB).",
   {
@@ -479,6 +494,7 @@ server.tool(
       { name: "saferead_read_batch", url: `${SR}/v1/read-batch`, body: { urls: ["https://example.com/", "https://example.org/"] } },
       { name: "saferead_fetch", url: `${SR}/v1/fetch`, body: { url: "https://example.com/" } },
       { name: "saferead_watch", url: `${SR}/v1/watch`, body: { urls: ["https://example.com/"], watch_id: "probe-watch" } },
+      { name: "saferead_search", url: `${SR}/v1/search`, body: { query: "WCAG 2.2 new success criteria" } },
       { name: "shipcheck_scan", url: `${SC}/v1/check`, body: { files: [{ path: "AGENTS.md", content: "# rules" }] } },
       { name: "docread_convert", url: `${DR}/v1/convert`, body: { content: "<p>hi</p>", filename: "probe.html" } },
       { name: "docread_tables", url: `${DR}/v1/tables`, body: { content: "<table><tr><th>a</th></tr><tr><td>1</td></tr></table>", filename: "probe.html" } },
@@ -511,7 +527,7 @@ server.tool(
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", saferead_fetch_plain: "0.001", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002", saferead_watch_per_url: "0.002", shipcheck: "0.01" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", saferead_fetch_plain: "0.001", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002", saferead_watch_per_url: "0.002", saferead_search: "0.02", shipcheck: "0.01" },
           pricing: "https://saferead.grindfree.net/pricing.json", quote: "https://saferead.grindfree.net/quote",
           network: "eip155:8453",
         },
