@@ -1,5 +1,7 @@
 # GrindFree Agent Security
 
+[![ronin93/grindfree-agent-security MCP server](https://glama.ai/mcp/servers/ronin93/grindfree-agent-security/badges/score.svg)](https://glama.ai/mcp/servers/ronin93/grindfree-agent-security)
+
 MCP server + client snippets for GrindFree’s pay-per-call agent security APIs on **Base**:
 
 | Service | Endpoint | Price | What it does |
