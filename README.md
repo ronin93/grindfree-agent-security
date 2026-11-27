@@ -105,6 +105,21 @@ Claude Desktop / Cursor-style config:
 
 ---
 
+## Ward Pass (prepaid, optional) and delivery receipts
+
+Prefer not to sign every call? Buy a [Ward Pass](https://wardpass.grindfree.net): one $1.00 x402 payment = $1 of calls on every Ward at list price (zero markup), debited only on HTTP 200.
+
+```bash
+# buy once with the wardpass_buy tool (caller wallet), or any x402 client:
+curl -i -X POST https://wardpass.grindfree.net/v1/pass -H "Idempotency-Key: $(uuidgen)"   # → 402, pay, retry → {"pass":"wp_…"}
+# then run the MCP server (0.11.0+) with the pass instead of a wallet key
+WARD_PASS=wp_… npx -y @grindfree/agent-security-mcp
+```
+
+- Every paid 200 carries a delivery receipt (x402 #4392): the tool result includes `receipt.delivery_receipt_sha256`, `delivery_body_sha256` and a free `receipt_url`.
+- Every tool call sends an `Idempotency-Key`, so a retry after a paid 200 is replayed and never charged twice (x402 #4367).
+- `wardpass_balance` (free) shows balance, calls and recent receipt IDs. If the pass runs out and `X402_PRIVATE_KEY` is set, calls fall back to normal x402.
+
 ## Docker
 
 A root `Dockerfile` builds the stdio MCP server. The wallet is supplied at runtime, never baked in:

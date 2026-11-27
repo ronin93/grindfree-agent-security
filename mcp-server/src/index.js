@@ -3,7 +3,8 @@
  * GrindFree agent-security MCP (stdio).
  * Exposes PromptShield, CrawlSafe, ToolGuard, CommandGuard, MemoryGuard,
  * WireShield, DocShield, SafeRead (read, fetch, watch, search), DocRead, AskHuman, TrifectaGate and ShipCheck. Paid calls use the CALLER's
- * wallet via X402_PRIVATE_KEY / PRIVATE_KEY — never GrindFree keys.
+ * wallet via X402_PRIVATE_KEY / PRIVATE_KEY, or the caller's prepaid Ward Pass via WARD_PASS — never GrindFree keys.
+ * Every paid call sends an Idempotency-Key and returns the Ward's delivery receipt (x402 #4392).
  *
  * Unpaid discovery: tools still work for unpaid 402 probes when
  * GRINDFREE_ALLOW_UNPAID=1 (returns the 402 challenge JSON, not product data).
@@ -16,6 +17,7 @@ import { ExactEvmScheme } from "@x402/evm";
 import { privateKeyToAccount } from "viem/accounts";
 import { readFile, stat } from "node:fs/promises";
 import { basename } from "node:path";
+import { randomUUID } from "node:crypto";
 
 const PS = "https://promptshield.grindfree.net";
 const CS = "https://crawlsafe.grindfree.net";
@@ -46,21 +48,56 @@ function getPaidFetch() {
   });
 }
 
+const WP = "https://wardpass.grindfree.net";
+const passToken = () => {
+  const t = (process.env.WARD_PASS || process.env.GRINDFREE_WARD_PASS || "").trim();
+  return /^wp_[A-Za-z0-9_-]{16,}$/.test(t) ? t : null;
+};
+// Delivery-receipt / Ward Pass / idempotency headers worth surfacing to the agent.
+const RECEIPT_HEADERS = ["x-delivery-receipt-sha256", "x-delivery-body-sha256", "x-charged-usd", "x-ward-pass-remaining", "x-ward-pass-status", "x-ward-pass-error", "x-idempotency-replayed", "x-idempotency-key"];
+function receiptOf(res, origin) {
+  const out = {};
+  for (const h of RECEIPT_HEADERS) { const v = res.headers.get(h); if (v != null) out[h.replace(/^x-/, "").replace(/-/g, "_")] = v; }
+  if (out.delivery_receipt_sha256 && origin) out.receipt_url = `${origin}/receipts/${out.delivery_receipt_sha256}`;
+  return Object.keys(out).length ? out : undefined;
+}
+
 async function postJson(url, body, { paid } = { paid: true }) {
-  const headers = { "content-type": "application/json", accept: "application/json" };
+  // One Idempotency-Key per tool call: an automatic retry is replayed by the Ward and never charged twice (x402 #4367).
+  const headers = { "content-type": "application/json", accept: "application/json", "idempotency-key": randomUUID() };
   const init = { method: "POST", headers, body: JSON.stringify(body) };
+  const origin = new URL(url).origin;
   let res;
+  let via = paid ? "x402" : "free";
   if (paid) {
-    const paidFetch = getPaidFetch();
-    if (!paidFetch) {
-      return {
-        ok: false,
-        status: 0,
-        error:
-          "Missing X402_PRIVATE_KEY (or PRIVATE_KEY). Set the caller's Base USDC wallet key in the MCP host env. GrindFree never supplies keys.",
-      };
+    const pass = passToken();
+    if (pass) {
+      // Ward Pass: prepaid balance, debited at list price only on HTTP 200. No wallet signature needed.
+      res = await fetch(url, { ...init, headers: { ...headers, "x-ward-pass": pass } });
+      via = "ward_pass";
+      if (res.status === 402 && res.headers.get("x-ward-pass-error")) {
+        const passError = res.headers.get("x-ward-pass-error");
+        const paidFetch = getPaidFetch();
+        if (!paidFetch) {
+          const text = await res.text();
+          let json; try { json = JSON.parse(text); } catch { json = { raw: text.slice(0, 2000) }; }
+          return { ok: false, status: 402, via, ward_pass_error: passError, error: `Ward Pass ${passError}. Top up at ${WP}/v1/pass (send X-Ward-Pass) or set X402_PRIVATE_KEY.`, json };
+        }
+        res = await paidFetch(url, init);
+        via = "x402_after_ward_pass_" + passError;
+      }
+    } else {
+      const paidFetch = getPaidFetch();
+      if (!paidFetch) {
+        return {
+          ok: false,
+          status: 0,
+          error:
+            "Missing X402_PRIVATE_KEY (or PRIVATE_KEY) or WARD_PASS. Set the caller's Base USDC wallet key, or a prepaid Ward Pass (wp_...) from https://wardpass.grindfree.net, in the MCP host env. GrindFree never supplies keys.",
+        };
+      }
+      res = await paidFetch(url, init);
     }
-    res = await paidFetch(url, init);
   } else {
     res = await fetch(url, init);
   }
@@ -71,12 +108,12 @@ async function postJson(url, body, { paid } = { paid: true }) {
   } catch {
     json = { raw: text.slice(0, 2000) };
   }
-  return { ok: res.ok, status: res.status, json };
+  return clean({ ok: res.ok, status: res.status, via: paid ? via : undefined, receipt: receiptOf(res, origin), json });
 }
 
 const server = new McpServer({
   name: "grindfree-agent-security",
-  version: "0.8.0",
+  version: "0.11.0",
 });
 
 server.tool(
@@ -541,22 +578,55 @@ server.tool(
     }
     const text = JSON.stringify(
       {
-        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR, docread: DR, askhuman: AH, trifectagate: TF, shipcheck: SC },
+        origins: { promptshield: PS, crawlsafe: CS, toolguard: TG, commandguard: CG, memoryguard: MG, wireshield: WS, docshield: DS, saferead: SR, docread: DR, askhuman: AH, trifectagate: TF, shipcheck: SC, wardpass: WP },
         discovery: {
           well_known: ["/.well-known/x402", "/openapi.json", "/llms.txt"],
           payTo: "0xe4b5827994B7B3Cd38F9830d9ECF58b51B77721b",
-          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", commandguard_check_and_approve: "0.03", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", saferead_fetch_plain: "0.001", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002", saferead_watch_per_url: "0.002", saferead_search: "0.02", shipcheck: "0.01" },
+          price_usdc: { promptshield: "0.002", crawlsafe: "0.001", toolguard: "0.002", commandguard: "0.001", commandguard_check_and_approve: "0.03", memoryguard: "0.002", wireshield: "0.002", docshield: "0.004", saferead: "0.002", saferead_batch_per_url: "0.002", saferead_fetch_plain: "0.001", docread: "0.003", docread_tables: "0.004", askhuman: "0.03", trifectagate: "0.002", saferead_watch_per_url: "0.002", saferead_search: "0.02", shipcheck: "0.01", wardpass_prepaid: "1.00 (credit, zero markup)" },
           pricing: "https://saferead.grindfree.net/pricing.json", quote: "https://saferead.grindfree.net/quote",
           network: "eip155:8453",
         },
         unpaid_probes: probes,
         payment_note:
-          "Paid tools require caller X402_PRIVATE_KEY with Base USDC. Decisions are advisory: the caller must enforce block/deny.",
+          "Paid tools use the caller's X402_PRIVATE_KEY (Base USDC) or a prepaid WARD_PASS (wp_..., https://wardpass.grindfree.net). Every paid 200 returns a delivery receipt (x402 #4392); calls send Idempotency-Key so retries are never charged twice. Decisions are advisory: the caller must enforce block/deny.",
       },
       null,
       2
     );
     return { content: [{ type: "text", text }] };
+  }
+);
+
+server.tool(
+  "wardpass_buy",
+  "Buy or top up a Ward Pass: one $1.00 USDC prepaid balance (x402, caller's wallet) usable on every GrindFree Ward at list price, zero markup, debited only on HTTP 200. Returns a wp_ token ONCE: store it and set WARD_PASS=wp_... in the MCP env. Pass existing_pass to top it up instead.",
+  {
+    existing_pass: z.string().optional().describe("Optional existing wp_ pass to top up instead of issuing a new one"),
+  },
+  async ({ existing_pass }) => {
+    const paidFetch = getPaidFetch();
+    if (!paidFetch) return reply({ ok: false, status: 0, error: "wardpass_buy needs the caller's X402_PRIVATE_KEY (Base USDC). GrindFree never supplies keys." });
+    const headers = { "content-type": "application/json", accept: "application/json", "idempotency-key": randomUUID() };
+    if (existing_pass) headers["x-ward-pass"] = existing_pass;
+    const res = await paidFetch(`${WP}/v1/pass`, { method: "POST", headers, body: "{}" });
+    const text = await res.text();
+    let json; try { json = JSON.parse(text); } catch { json = { raw: text.slice(0, 2000) }; }
+    return reply(clean({ ok: res.ok, status: res.status, receipt: receiptOf(res, WP), json }));
+  }
+);
+
+server.tool(
+  "wardpass_balance",
+  "Free: Ward Pass balance, calls, recent usage with delivery receipt IDs, and top-ups. Uses WARD_PASS from the env unless pass is given.",
+  {
+    pass: z.string().optional().describe("wp_ pass token; defaults to the WARD_PASS env var"),
+  },
+  async ({ pass }) => {
+    const t = pass || passToken();
+    if (!t) return reply({ ok: false, status: 0, error: "No Ward Pass. Buy one with wardpass_buy or at https://wardpass.grindfree.net/v1/pass." });
+    const res = await fetch(`${WP}/v1/pass/balance`, { headers: { accept: "application/json", "x-ward-pass": t } });
+    const json = await res.json().catch(() => ({}));
+    return reply({ ok: res.ok, status: res.status, json });
   }
 );
 
